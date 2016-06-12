@@ -5,6 +5,9 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.ws.commons.util.Base64;
+import org.apache.ws.commons.util.Base64.DecodingException;
+import org.sikuli.script.FindFailed;
+import org.sikuli.script.Pattern;
 import org.sikuli.script.Screen;
 
 import com.github.hifi.remotesikulilibrary.keywords.Configuration;
@@ -45,6 +48,29 @@ public class Server implements RemoteSikuliLibraryInterface {
 
 	public void enableDebugging() {
 		Helper.enableDebug();
+	}
+
+	public void clickItem(String imageNameOrText, double similarity, int xOffset, int yOffset, boolean remote,
+			Object... imageData) {
+		SikuliLogger.logDebug("Clicking item at Server class");
+		if (remote && imageData.length > 0 && imageData[0].toString().length() > 0) {
+			SikuliLogger.logDebug("Parsing image from remote call");
+			try {
+				imageNameOrText = Helper.writeImageByteArrayToDisk(Base64.decode(imageData[0].toString()));
+			} catch (DecodingException e) {
+				SikuliLogger.logDebug(e.getStackTrace());
+				throw new RuntimeException(e.getMessage());
+			}
+		} else {
+			imageNameOrText = Helper.getImageDirectory()+"/"+imageNameOrText;
+		}
+		try {
+			SikuliLogger.logDebug("Clicking item: "+imageNameOrText);
+			new Screen().click(new Pattern(imageNameOrText).similar((float) similarity).targetOffset(xOffset, yOffset));
+		} catch (FindFailed e) {
+			SikuliLogger.logDebug(e.getStackTrace());
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 }

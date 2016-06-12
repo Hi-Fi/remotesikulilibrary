@@ -1,8 +1,11 @@
 package com.github.hifi.remotesikulilibrary.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.DecodingException;
 import org.apache.xmlrpc.XmlRpcException;
@@ -35,8 +38,24 @@ public class Client implements RemoteSikuliLibraryInterface {
 
 	}
 
+	public void enableDebugging() {
+		this.executeRemoteCall("enableDebugging");
+	}
+
+	public void clickItem(String imageNameOrText, double similarity, int xOffset, int yOffset, boolean remote,
+			Object... imageData) {
+		Object image = null;
+		try {
+			SikuliLogger.logDebug("Loading image from: "+Helper.getImageDirectory()+"/"+imageNameOrText);
+			image = Base64.encode(FileUtils.readFileToByteArray(new File(Helper.getImageDirectory()+"/"+imageNameOrText)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.executeRemoteCall("clickItem", similarity, xOffset, yOffset, remote, image);
+	}
+	
 	@SuppressWarnings("rawtypes")
-	public String executeRemoteCall(String keyword, Object... params) {
+	private String executeRemoteCall(String keyword, Object... params) {
 		Map response = new HashMap();
 		SikuliLogger.logDebug("Calling remotely keyword: " + keyword + " with " + params.length + " parameters");
 		try {
@@ -57,9 +76,5 @@ public class Client implements RemoteSikuliLibraryInterface {
 		} else {
 			return "No return value";
 		}
-	}
-
-	public void enableDebugging() {
-		this.executeRemoteCall("enableDebugging");
 	}
 }
