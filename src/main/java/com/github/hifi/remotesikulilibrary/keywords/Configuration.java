@@ -4,6 +4,7 @@ import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 import org.robotframework.remoteserver.RemoteServer;
+import org.sikuli.basics.Settings;
 
 import com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary;
 import com.github.hifi.remotesikulilibrary.utils.Helper;
@@ -67,12 +68,24 @@ public class Configuration {
 	@RobotKeyword("Stops remote server. Mainly used for testing.")
 	public void stopRemoteServer() {
 		try {
-			remoteServer.stop();
 			Helper.closeConnection();
+			remoteServer.stop();
 		} catch (Exception e) {
+			SikuliLogger.logDebug(e.getMessage());
 			SikuliLogger.logDebug(e.getStackTrace());
-			throw new RuntimeException(e.getMessage());
 		}
+	}
+	
+	@RobotKeyword("Enables OCR to allow text recognition usage when clicking.")
+	public void enableOCR() {
+		Settings.OcrTextSearch = true;
+		Settings.OcrTextRead = true;
+	}
+	
+	@RobotKeyword("Disables OCR to allow text recognition usage when clicking.")
+	public void disableOCR() {
+		Settings.OcrTextSearch = false;
+		Settings.OcrTextRead = false;
 	}
 
 }
