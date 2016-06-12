@@ -10,7 +10,6 @@ import org.sikuli.script.FindFailed;
 import org.sikuli.script.Pattern;
 import org.sikuli.script.Screen;
 
-import com.github.hifi.remotesikulilibrary.keywords.Configuration;
 import com.github.hifi.remotesikulilibrary.utils.Helper;
 import com.github.hifi.remotesikulilibrary.utils.SikuliLogger;
 
@@ -23,27 +22,13 @@ public class Server implements RemoteSikuliLibraryInterface {
 
 	public String captureScreenshot(Object... remote) {
 		SikuliLogger.logDebug("Calling screenshot capture from server class");
-		Screen s = new Screen();
-		String temporaryScreenshotPath = s.capture().getFile();
-		byte[] imageData;
-		try {
-			imageData = FileUtils.readFileToByteArray(new File(temporaryScreenshotPath));
-		} catch (IOException e) {
-			SikuliLogger.logDebug(e.getStackTrace());
-			throw new RuntimeException(e.getMessage());
-		}
+		byte[] imageData = this.captureScreenshot();
 		if (remote.length > 0) {
-			SikuliLogger.logDebug("Returning base64 data of image from server location: "+temporaryScreenshotPath);
+			SikuliLogger.logDebug("Returning base64 data of image");
 			return Base64.encode(imageData);
 		} else {
 			return Helper.writeImageByteArrayToDisk(imageData);
 		}
-		
-	}
-
-	public void clickImage(Object... remote) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void enableDebugging() {
@@ -68,9 +53,29 @@ public class Server implements RemoteSikuliLibraryInterface {
 			SikuliLogger.logDebug("Clicking item: "+imageNameOrText);
 			new Screen().click(new Pattern(imageNameOrText).similar((float) similarity).targetOffset(xOffset, yOffset));
 		} catch (FindFailed e) {
+			if (remote) {
+				SikuliLogger.logError("Image not found at remote computer. Screenshot below.");
+				boolean isDebug = Helper.isDebug();
+				if (!isDebug) {Helper.enableDebug();}
+				SikuliLogger.logDebug("-IMAGEDATA-"+Base64.encode(this.captureScreenshot())+"-IMAGEDATA-");
+				if (!isDebug) {Helper.disableDebug();}
+			} else {
+				SikuliLogger.logError("Image not found at local computer. Screenshot below.");
+				SikuliLogger.logImage(Helper.writeImageByteArrayToDisk(this.captureScreenshot()));
+			}
 			SikuliLogger.logDebug(e.getStackTrace());
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-
+	
+	private byte[] captureScreenshot() {
+		String temporaryScreenshotPath = new Screen().capture().getFile();
+		SikuliLogger.logDebug("Temporary image stored to: "+temporaryScreenshotPath);
+		try {
+			return FileUtils.readFileToByteArray(new File(temporaryScreenshotPath));
+		} catch (IOException e) {
+			SikuliLogger.logDebug(e.getStackTrace());
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 }

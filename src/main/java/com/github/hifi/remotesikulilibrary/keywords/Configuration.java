@@ -68,11 +68,11 @@ public class Configuration {
 	@RobotKeyword("Stops remote server. Mainly used for testing.")
 	public void stopRemoteServer() {
 		try {
-			remoteServer.stop();
 			Helper.closeConnection();
+			remoteServer.stop();
 		} catch (Exception e) {
+			SikuliLogger.logDebug(e.getMessage());
 			SikuliLogger.logDebug(e.getStackTrace());
-			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
