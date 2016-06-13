@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary.impl;
+package com.github.hi_fi.remotesikulilibrary.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +10,8 @@ import org.sikuli.script.FindFailed;
 import org.sikuli.script.Pattern;
 import org.sikuli.script.Screen;
 
-import com.github.hifi.remotesikulilibrary.utils.Helper;
-import com.github.hifi.remotesikulilibrary.utils.SikuliLogger;
+import com.github.hi_fi.remotesikulilibrary.utils.Helper;
+import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
 /**
  * Handles both local and server side requests.

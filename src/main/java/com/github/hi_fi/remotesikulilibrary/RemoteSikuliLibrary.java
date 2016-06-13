@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary;
+package com.github.hi_fi.remotesikulilibrary;
 import org.robotframework.javalib.library.AnnotationLibrary;
 
 public class RemoteSikuliLibrary extends AnnotationLibrary {

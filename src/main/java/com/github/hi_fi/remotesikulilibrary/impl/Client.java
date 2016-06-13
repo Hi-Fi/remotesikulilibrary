@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary.impl;
+package com.github.hi_fi.remotesikulilibrary.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +10,8 @@ import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.DecodingException;
 import org.apache.xmlrpc.XmlRpcException;
 
-import com.github.hifi.remotesikulilibrary.utils.Helper;
-import com.github.hifi.remotesikulilibrary.utils.SikuliLogger;
+import com.github.hi_fi.remotesikulilibrary.utils.Helper;
+import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
 /**
  * Handles cases when using SikuliLibrary through Robot's RemoteLibrary

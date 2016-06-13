@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary.utils;
+package com.github.hi_fi.remotesikulilibrary.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +11,9 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
-import com.github.hifi.remotesikulilibrary.impl.Client;
-import com.github.hifi.remotesikulilibrary.impl.RemoteSikuliLibraryInterface;
-import com.github.hifi.remotesikulilibrary.impl.Server;
+import com.github.hi_fi.remotesikulilibrary.impl.Client;
+import com.github.hi_fi.remotesikulilibrary.impl.RemoteSikuliLibraryInterface;
+import com.github.hi_fi.remotesikulilibrary.impl.Server;
 
 public class Helper {
 

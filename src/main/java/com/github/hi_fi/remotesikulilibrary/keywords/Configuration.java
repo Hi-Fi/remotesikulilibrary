@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary.keywords;
+package com.github.hi_fi.remotesikulilibrary.keywords;
 
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
@@ -6,9 +6,9 @@ import org.robotframework.javalib.annotation.RobotKeywords;
 import org.robotframework.remoteserver.RemoteServer;
 import org.sikuli.basics.Settings;
 
-import com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary;
-import com.github.hifi.remotesikulilibrary.utils.Helper;
-import com.github.hifi.remotesikulilibrary.utils.SikuliLogger;
+import com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary;
+import com.github.hi_fi.remotesikulilibrary.utils.Helper;
+import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
 @RobotKeywords
 public class Configuration {

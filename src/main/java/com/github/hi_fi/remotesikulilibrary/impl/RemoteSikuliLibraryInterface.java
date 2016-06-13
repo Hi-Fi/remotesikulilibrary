@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary.impl;
+package com.github.hi_fi.remotesikulilibrary.impl;
 
 public interface RemoteSikuliLibraryInterface {
 	

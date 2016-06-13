@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary.utils;
+package com.github.hi_fi.remotesikulilibrary.utils;
 
 public class SikuliLogger {
 	
