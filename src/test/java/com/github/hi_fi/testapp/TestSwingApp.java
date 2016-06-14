@@ -30,7 +30,7 @@ public class TestSwingApp {
 	}
 
 	private void prepareGUI() {
-		mainFrame = new JFrame("Java SWING Examples");
+		mainFrame = new JFrame("Test application for Remote Sikuli Library");
 		mainFrame.setSize(400, 400);
 		mainFrame.setLayout(new GridLayout(3, 1));
 
