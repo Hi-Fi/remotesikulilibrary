@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary.keywords;
+package com.github.hi_fi.remotesikulilibrary.keywords;
 
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
@@ -6,9 +6,9 @@ import org.robotframework.javalib.annotation.RobotKeywords;
 import org.robotframework.remoteserver.RemoteServer;
 import org.sikuli.basics.Settings;
 
-import com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary;
-import com.github.hifi.remotesikulilibrary.utils.Helper;
-import com.github.hifi.remotesikulilibrary.utils.SikuliLogger;
+import com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary;
+import com.github.hi_fi.remotesikulilibrary.utils.Helper;
+import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
 @RobotKeywords
 public class Configuration {
@@ -86,6 +86,16 @@ public class Configuration {
 	public void disableOCR() {
 		Settings.OcrTextSearch = false;
 		Settings.OcrTextRead = false;
+	}
+	
+	@RobotKeyword("Sets wait time to wait for images/texts.")
+	public void setWaitTime(double timeout) {
+		Helper.setWaitTimeout(timeout);
+	}
+	
+	@RobotKeyword("Disables OCR to allow text recognition usage when clicking.")
+	public double getWaitTime() {
+		return Helper.getWaitTimeout();
 	}
 
 }

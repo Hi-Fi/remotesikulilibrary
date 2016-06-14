@@ -1,4 +1,4 @@
-package com.github.hifi.remotesikulilibrary.impl;
+package com.github.hi_fi.remotesikulilibrary.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +10,8 @@ import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.DecodingException;
 import org.apache.xmlrpc.XmlRpcException;
 
-import com.github.hifi.remotesikulilibrary.utils.Helper;
-import com.github.hifi.remotesikulilibrary.utils.SikuliLogger;
+import com.github.hi_fi.remotesikulilibrary.utils.Helper;
+import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
 /**
  * Handles cases when using SikuliLibrary through Robot's RemoteLibrary
@@ -41,8 +41,8 @@ public class Client implements RemoteSikuliLibraryInterface {
 			Object... imageData) {
 		Object image = "";
 		try {
-			SikuliLogger.logDebug("Checking if "+Helper.getImageDirectory()+"/"+imageNameOrText+" is image");
-			File localImage = new File(Helper.getImageDirectory()+"/"+imageNameOrText);
+			SikuliLogger.logDebug("Checking if " + Helper.getImageDirectory() + "/" + imageNameOrText + " is image");
+			File localImage = new File(Helper.getImageDirectory() + "/" + imageNameOrText);
 			if (localImage.exists()) {
 				image = Base64.encode(FileUtils.readFileToByteArray(localImage));
 			}
@@ -51,7 +51,7 @@ public class Client implements RemoteSikuliLibraryInterface {
 		}
 		this.executeRemoteCall("clickItem", imageNameOrText, similarity, xOffset, yOffset, true, image);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private String executeRemoteCall(String keyword, Object... params) {
 		Map response = new HashMap();
@@ -60,12 +60,12 @@ public class Client implements RemoteSikuliLibraryInterface {
 			response = (Map) Helper.getRemoteClient().execute("run_keyword", new Object[] { keyword, params });
 			SikuliLogger.logDebug("Response from remote call: " + response);
 			if (response.get("status") == null || response.get("status").equals("FAIL")) {
-				SikuliLogger.logError("Remote call to "+keyword+" failed.");
+				SikuliLogger.logError("Remote call to " + keyword + " failed.");
 				if (response.get("output") != null) {
-					SikuliLogger.logDebug("Output: "+response.get("output"));
+					SikuliLogger.logDebug("Output: " + response.get("output"));
 					if (response.get("output").toString().contains("-IMAGEDATA-")) {
 						String base64 = response.get("output").toString().split("-IMAGEDATA-")[1];
-						SikuliLogger.logDebug("Parser data from output: "+base64);
+						SikuliLogger.logDebug("Parser data from output: " + base64);
 						try {
 							Helper.writeImageByteArrayToDisk(Base64.decode(base64));
 						} catch (DecodingException e) {
@@ -73,10 +73,10 @@ public class Client implements RemoteSikuliLibraryInterface {
 						}
 					}
 				}
-				SikuliLogger.logDebug("Traceback: "+response.get("traceback"));
+				SikuliLogger.logDebug("Traceback: " + response.get("traceback"));
 				throw new RuntimeException(response.get("error").toString());
 			} else {
-				SikuliLogger.logDebug("Output: "+response.get("output"));
+				SikuliLogger.logDebug("Output: " + response.get("output"));
 			}
 		} catch (XmlRpcException e) {
 			SikuliLogger.logDebug(e.getStackTrace());
@@ -87,5 +87,20 @@ public class Client implements RemoteSikuliLibraryInterface {
 		} else {
 			return "No return value";
 		}
+	}
+
+	public void waitUntilScreenContains(String imageNameOrText, double similarity, boolean remote,
+			Object... imageData) {
+		Object image = "";
+		try {
+			SikuliLogger.logDebug("Checking if " + Helper.getImageDirectory() + "/" + imageNameOrText + " is image");
+			File localImage = new File(Helper.getImageDirectory() + "/" + imageNameOrText);
+			if (localImage.exists()) {
+				image = Base64.encode(FileUtils.readFileToByteArray(localImage));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.executeRemoteCall("waitUntilScreenContains", imageNameOrText, similarity, true, image);
 	}
 }

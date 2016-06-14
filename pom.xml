@@ -1,19 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
-	<groupId>com.github.hifi</groupId>
+	<groupId>com.github.hi_fi</groupId>
 	<artifactId>remotesikulilibrary</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>robotframework-remotessikulilibrary</name>
+	<name>robotframework-remotesikulilibrary</name>
 	<description>A Robot Framework library + Java-agent for for Sikuli based UI testing</description>
-	<url>https://github.com/hifi/remotesikulilibrary</url>
+	<url>https://github.com/hi-fi/remotesikulilibrary</url>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/hi-fi/remotesikulilibrary/issues</url>
+	</issueManagement>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -22,21 +23,24 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>https://github.com/hifi/remotesikulilibrary</url>
-		<connection>scm:git:https://github.com/hifi/remotesikulilibrary</connection>
+		<url>https://github.com/hi-fi/remotesikulilibrary</url>
+		<connection>scm:git:git://github.com/hi-fi/remotesikulilibrary.git</connection>
+		<developerConnection>scm:git:git@github.com:hi-fi/remotesikulilibrary.git</developerConnection>
 	</scm>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<keywords.class>com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary</keywords.class>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
 
 	<developers>
 		<developer>
 			<name>Juho Saarinen</name>
 			<email>juho.saarinen@gmail.com</email>
+			<id>hi-fi</id>
 		</developer>
 	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<keywords.class>com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary</keywords.class>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -117,7 +121,8 @@
 								<extraPathDirectory>target/remotesikulilibrary-${project.version}.jar</extraPathDirectory>
 							</extraPathDirectories>
 							<variables>
-								<variable>classpath:${maven.classpath}</variable>
+								<variable>maven.runtime.classpath:${maven.runtime.classpath}</variable>
+								<variable>maven.test.classpath:${maven.test.classpath}</variable>
 								<classpath />
 							</variables>
 						</configuration>
@@ -312,7 +317,8 @@
 						<configuration>
 							<exportAntProperties>true</exportAntProperties>
 							<target>
-								<property name="maven.classpath" refid="maven.runtime.classpath" />
+								<property name="maven.runtime.classpath" refid="maven.runtime.classpath" />
+								<property name="maven.test.classpath" refid="maven.test.classpath" />
 							</target>
 						</configuration>
 					</execution>
@@ -352,7 +358,7 @@
 						<classpath />
 						<argument>org.robotframework.remoteserver.RemoteServer</argument>
 						<argument>--library</argument>
-						<argument>com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary:/</argument>
+						<argument>com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary:/</argument>
 						<argument>--port</argument>
 						<argument>62022</argument>
 					</arguments>
