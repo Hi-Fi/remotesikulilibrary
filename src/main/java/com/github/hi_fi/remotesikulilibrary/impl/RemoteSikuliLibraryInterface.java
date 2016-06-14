@@ -7,5 +7,7 @@ public interface RemoteSikuliLibraryInterface {
 	public void enableDebugging();
 	
 	public void clickItem(String imageNameOrText, double similarity, int xOffset, int yOffset, boolean remote, Object...imageData);
+	
+	public void waitUntilScreenContains(String imageNameOrText, double similarity, boolean remote, Object...imageData);
 
 }

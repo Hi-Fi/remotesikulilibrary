@@ -23,6 +23,7 @@ public class Helper {
 	private static boolean logDebug = false;
 	private static String imageDirectory = "testdata/images";
 	private static String screenshotDirectory = "images";
+	private static double waitTimeout = 10.0;
 	
 	
 	public static XmlRpcClient getRemoteClient() {
@@ -44,6 +45,15 @@ public class Helper {
 	public static boolean disableDebug() {
 		logDebug = false;
 		return logDebug;
+	}
+	
+	public static double setWaitTimeout(double timeout) {
+		waitTimeout = timeout;
+		return waitTimeout;
+	}
+	
+	public static double getWaitTimeout() {
+		return waitTimeout;
 	}
 	
 	public static void setImageDirectory(String imageDirectory) {

@@ -1,11 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
 	<groupId>com.github.hi_fi</groupId>
 	<artifactId>remotesikulilibrary</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -352,13 +347,21 @@
 					<execution>
 						<id>startRemoteServer</id>
 						<goals>
-							<goal>java</goal>
+							<goal>exec</goal>
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>com.github.hi_fi.testapp.TestSwingApp</mainClass>
-					<classpathScope>test</classpathScope>
+					<executable>java</executable>
+					<arguments>
+						<argument>-classpath</argument>
+						<classpath />
+						<argument>org.robotframework.remoteserver.RemoteServer</argument>
+						<argument>--library</argument>
+						<argument>com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary:/</argument>
+						<argument>--port</argument>
+						<argument>62022</argument>
+					</arguments>
 				</configuration>
 			</plugin>
 		</plugins>

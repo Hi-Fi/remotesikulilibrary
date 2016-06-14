@@ -87,5 +87,15 @@ public class Configuration {
 		Settings.OcrTextSearch = false;
 		Settings.OcrTextRead = false;
 	}
+	
+	@RobotKeyword("Sets wait time to wait for images/texts.")
+	public void setWaitTime(double timeout) {
+		Helper.setWaitTimeout(timeout);
+	}
+	
+	@RobotKeyword("Disables OCR to allow text recognition usage when clicking.")
+	public double getWaitTime() {
+		return Helper.getWaitTimeout();
+	}
 
 }
