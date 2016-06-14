@@ -126,7 +126,8 @@
 								<extraPathDirectory>target/remotesikulilibrary-${project.version}.jar</extraPathDirectory>
 							</extraPathDirectories>
 							<variables>
-								<variable>classpath:${maven.classpath}</variable>
+								<variable>maven.runtime.classpath:${maven.runtime.classpath}</variable>
+								<variable>maven.test.classpath:${maven.test.classpath}</variable>
 								<classpath />
 							</variables>
 						</configuration>
@@ -321,7 +322,8 @@
 						<configuration>
 							<exportAntProperties>true</exportAntProperties>
 							<target>
-								<property name="maven.classpath" refid="maven.runtime.classpath" />
+								<property name="maven.runtime.classpath" refid="maven.runtime.classpath" />
+								<property name="maven.test.classpath" refid="maven.test.classpath" />
 							</target>
 						</configuration>
 					</execution>
@@ -350,21 +352,13 @@
 					<execution>
 						<id>startRemoteServer</id>
 						<goals>
-							<goal>exec</goal>
+							<goal>java</goal>
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
-					<executable>java</executable>
-					<arguments>
-						<argument>-classpath</argument>
-						<classpath />
-						<argument>org.robotframework.remoteserver.RemoteServer</argument>
-						<argument>--library</argument>
-						<argument>com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary:/</argument>
-						<argument>--port</argument>
-						<argument>62022</argument>
-					</arguments>
+					<mainClass>com.github.hi_fi.testapp.TestSwingApp</mainClass>
+					<classpathScope>test</classpathScope>
 				</configuration>
 			</plugin>
 		</plugins>
