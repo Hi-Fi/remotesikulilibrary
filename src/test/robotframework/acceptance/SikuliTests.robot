@@ -24,7 +24,7 @@ Local call should be made if server connection is closed
 	
 Test remote screenshot capture to other remote server
     [Teardown]    Log results and kill process
-    Start Process    java    -cp    ${classpath}    org.robotframework.remoteserver.RemoteServer    --library    com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary:/    --port    62022
+    Start Process    java    -cp    ${maven.runtime.classpath}    org.robotframework.remoteserver.RemoteServer    --library    com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary:/    --port    62022
     Enable Debugging
     Initialize Connection    http://127.0.0.1:62022/
 	Enable Debugging
@@ -32,7 +32,7 @@ Test remote screenshot capture to other remote server
 	
 Test image click at other remote server
     [Teardown]    Log results and kill process
-    Start Process    java    -cp    ${classpath}    org.robotframework.remoteserver.RemoteServer    --library    com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary:/    --port    62022
+    Start Process    java    -cp    ${maven.runtime.classpath}    org.robotframework.remoteserver.RemoteServer    --library    com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary:/    --port    62022
     Enable Debugging
     Initialize Connection    http://127.0.0.1:62022/
 	Enable Debugging
