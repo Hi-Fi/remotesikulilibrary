@@ -14,18 +14,25 @@ Test image wait locally
 	Wait Until Screen Contains    buttons.png
 	
 Test image click locally
-    Enable OCR
+    [Teardown]    Log results and kill process
     Start test application
 	Wait Until Screen Contains    buttons.png
 	Click Item    ok_button.png
 	Wait Until Screen Contains    ok_clicked.png
 	
+Local input of text 
+    [Teardown]    Log results and kill process
+    Start test application
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    empty_text_field.png
+
 Local call should be made if server connection is closed
     Enable Debugging
     ${port}    Start Remote Server
     Initialize Connection    http://127.0.0.1:${port}/
     Stop Remote Server
     Capture Screenshot
+	
 	
 Test image wait remotely
 	[Teardown]    Log results and kill process
@@ -42,6 +49,14 @@ Test image click at other remote server
 	Wait Until Screen Contains    buttons.png
 	Click Item    ok_button.png
 	Wait Until Screen Contains    ok_clicked.png
+	
+Remote input of text 
+    [Teardown]    Log results and kill process
+    Start test server
+    Initialize Connection    http://127.0.0.1:62022/
+	Start test application
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    empty_text_field.png
 	
 Test remote screenshot capture to other remote server
     [Teardown]    Log results and kill process
