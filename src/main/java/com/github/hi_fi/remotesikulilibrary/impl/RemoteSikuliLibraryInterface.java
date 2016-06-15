@@ -4,7 +4,7 @@ import com.github.hi_fi.remotesikulilibrary.DTO.Locator;
 
 public interface RemoteSikuliLibraryInterface {
 	
-	public String captureScreenshot(Object...remote);
+	public String captureScreenshot(String[] remote);
 	
 	public void enableDebugging();
 	
@@ -13,5 +13,7 @@ public interface RemoteSikuliLibraryInterface {
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator);
 
 	public void inputText(String text, String imageNameOrText, Locator locator);
+
+	public void typeKeys(String text, String[] modifiers);
 
 }

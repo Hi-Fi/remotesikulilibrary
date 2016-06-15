@@ -22,7 +22,7 @@ public class Locator {
 	private double similarity = 0.7;
 	
 	
-	public Locator(Object...args) {
+	public Locator(String[] args) {
 		SikuliLogger.logDebug(args);
 		if (args.length > 0 && NumberUtils.isNumber(args[0].toString())) {
 			this.setSimilarity(Double.parseDouble(args[0].toString()));
@@ -134,8 +134,6 @@ public class Locator {
 	}
 	
 	public String updateLocatorTarget(String imageNameOrText) {
-		SikuliLogger.logDebug(this.isRemote());
-		SikuliLogger.logDebug(this.getImageData());
 		if (this.isRemote() && this.getImageData().length() > 10) {
 			SikuliLogger.logDebug("Parsing image from remote call");
 			try {

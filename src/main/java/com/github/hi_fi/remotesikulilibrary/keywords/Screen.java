@@ -6,19 +6,21 @@ import org.robotframework.javalib.annotation.RobotKeywords;
 
 import com.github.hi_fi.remotesikulilibrary.DTO.Locator;
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
+import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
 @RobotKeywords
 public class Screen {
 	
 	@RobotKeyword("Captures visible screen using Sikuli")
-	@ArgumentNames({"Is call remote=false"})
-	public String captureScreenshot(Object...remote) {
-		return Helper.getLibrary().captureScreenshot(remote);
+	@ArgumentNames({"*Techical arguments"})
+	public String captureScreenshot(String[] arguments) {
+		return Helper.getLibrary().captureScreenshot(arguments);
 	}
 	
 	@RobotKeyword("Wait until screen contains given item (image or text (of OCR is enabled))")
-	@ArgumentNames({"Image or text to wait, similarity=0.7, Is call remote=false"})
-	public void waitUntilScreenContains(String imageNameOrText, Object...arguments) {
+	@ArgumentNames({"Image or text to wait", "Similarity of images=0.7", "*Technical arguments"})
+	public void waitUntilScreenContains(String imageNameOrText, String[] arguments) {
+		SikuliLogger.log("Test");
 		Locator locator = new Locator(arguments);
 		Helper.getLibrary().waitUntilScreenContains(imageNameOrText, locator);
 	}

@@ -1,11 +1,8 @@
 package com.github.hi_fi.remotesikulilibrary.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.DecodingException;
 import org.apache.xmlrpc.XmlRpcException;
@@ -22,7 +19,7 @@ import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
  */
 public class Client implements RemoteSikuliLibraryInterface {
 
-	public String captureScreenshot(Object... remote) {
+	public String captureScreenshot(String[] remote) {
 		SikuliLogger.logDebug("Calling screenshot capture from client class");
 		String response = this.executeRemoteCall("captureScreenshot", true);
 		try {
@@ -57,6 +54,10 @@ public class Client implements RemoteSikuliLibraryInterface {
 		this.executeRemoteCall("inputText", text, imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
 	}
 
+	public void typeKeys(String keys, String[] modifiers) {
+		this.executeRemoteCall("typeKeys", keys, modifiers);
+	}
+	
 	@SuppressWarnings("rawtypes")
 	private String executeRemoteCall(String keyword, Object... params) {
 		Map response = new HashMap();

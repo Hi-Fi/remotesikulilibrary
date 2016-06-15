@@ -12,8 +12,8 @@ import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 public class Mouse {
 
 	@RobotKeyword("Click either given image or text at the screen.")
-	@ArgumentNames({"Image name or text to click", "Similarity of images=0.7", "X offset from centre of image=0", "Y offset from centre of image=0","Is call remote=false", "Base64 encoded image to click at remote case="})
-	public void clickItem(String imageNameOrText, Object...arguments) {
+	@ArgumentNames({"Image name or text to click", "Similarity of images=0.7", "X offset from centre of image=0", "Y offset from centre of image=0","*Technical arguments"})
+	public void clickItem(String imageNameOrText, String[] arguments) {
 		SikuliLogger.logDebug("Parsing parameter from arguments. There's "+arguments.length+" parameters to parse");
 		Locator locator = new Locator(arguments);
 		Helper.getLibrary().clickItem(imageNameOrText, locator);
