@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.github.hi_fi</groupId>
+	<groupId>com.github.hi-fi</groupId>
 	<artifactId>remotesikulilibrary</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -9,6 +9,13 @@
 	<name>robotframework-remotesikulilibrary</name>
 	<description>A Robot Framework library + Java-agent for for Sikuli based UI testing</description>
 	<url>https://github.com/hi-fi/remotesikulilibrary</url>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<issueManagement>
 		<system>GitHub Issues</system>
@@ -178,118 +185,17 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.4</version>
+				<version>1.5</version>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
-						<phase>install</phase>
+						<phase>verify</phase>
 						<goals>
 							<goal>sign</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-antrun-plugin</artifactId> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <id>createJarjarDir</id> -->
-			<!-- <phase>process-resources</phase> -->
-			<!-- <configuration> -->
-			<!-- <tasks> -->
-			<!-- <delete dir="${project.build.directory}/jarjarred" /> -->
-			<!-- <mkdir dir="${project.build.directory}/jarjarred" /> -->
-			<!-- </tasks> -->
-			<!-- </configuration> -->
-			<!-- <goals> -->
-			<!-- <goal>run</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
-			<!-- <plugin> -->
-			<!-- <groupId>org.sonatype.plugins</groupId> -->
-			<!-- <artifactId>jarjar-maven-plugin</artifactId> -->
-			<!-- <version>1.8</version> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <phase>package</phase> -->
-			<!-- <goals> -->
-			<!-- <goal>jarjar</goal> -->
-			<!-- </goals> -->
-			<!-- <configuration> -->
-			<!-- <output>${project.build.directory}/jarjarred</output> -->
-			<!-- <overwrite>true</overwrite> -->
-			<!-- <rules> -->
-			<!-- <rule> -->
-			<!-- <pattern>com.thoughtworks.**</pattern> -->
-			<!-- <result>com.github.hifi.remotesikulilibrary.@0</result> -->
-			<!-- </rule> -->
-			<!-- <rule> -->
-			<!-- <pattern>edu.emory.**</pattern> -->
-			<!-- <result>com.github.hifi.remotesikulilibrary.@0</result> -->
-			<!-- </rule> -->
-			<!-- <rule> -->
-			<!-- <pattern>org.aopalliance.**</pattern> -->
-			<!-- <result>com.github.hifi.remotesikulilibrary.@0</result> -->
-			<!-- </rule> -->
-			<!-- <rule> -->
-			<!-- <pattern>org.laughingpanda.**</pattern> -->
-			<!-- <result>com.github.hifi.remotesikulilibrary.@0</result> -->
-			<!-- </rule> -->
-			<!-- <rule> -->
-			<!-- <pattern>org.apache.log4j.**</pattern> -->
-			<!-- <result>@0</result> -->
-			<!-- </rule> -->
-			<!-- <rule> -->
-			<!-- <pattern>org.apache.**</pattern> -->
-			<!-- <result>com.github.hifi.remotesikulilibrary.@0</result> -->
-			<!-- </rule> -->
-			<!-- <rule> -->
-			<!-- <pattern>org.springframework.**</pattern> -->
-			<!-- <result>com.github.hifi.remotesikulilibrary.@0</result> -->
-			<!-- </rule> -->
-			<!-- <rule> -->
-			<!-- <pattern>javax.servlet.**</pattern> -->
-			<!-- <result>com.github.hifi.remotesikulilibrary.@0</result> -->
-			<!-- </rule> -->
-			<!-- <keep> -->
-			<!-- <pattern>org.apache.log4j.**</pattern> -->
-			<!-- </keep> -->
-			<!-- <keep> -->
-			<!-- <pattern>org.robotframework.**</pattern> -->
-			<!-- </keep> -->
-			<!-- <keep> -->
-			<!-- <pattern>JavaTools</pattern> -->
-			<!-- </keep> -->
-			<!-- </rules> -->
-			<!-- </configuration> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
-			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-jar-plugin</artifactId> -->
-			<!-- <version>2.4</version> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <phase>package</phase> -->
-			<!-- <goals> -->
-			<!-- <goal>jar</goal> -->
-			<!-- </goals> -->
-			<!-- <configuration> -->
-			<!-- <classesDirectory>${project.build.directory}/jarjarred</classesDirectory> -->
-			<!-- <archive> -->
-			<!-- <manifestEntries> -->
-			<!-- <Premain-Class>com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary</Premain-Class> -->
-			<!-- <Main-Class>com.github.hifi.remotesikulilibrary.RemoteSikuliLibrary</Main-Class> -->
-			<!-- </manifestEntries> -->
-			<!-- </archive> -->
-			<!-- </configuration> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
@@ -364,14 +270,43 @@
 					</arguments>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.3</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/python</directory>
-				<includes>
-					<include> *.py</include>
-				</includes>
-			</resource>
-		</resources>
 	</build>
 </project>
