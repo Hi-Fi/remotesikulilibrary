@@ -25,14 +25,19 @@ Local input of text
     Start test application
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png
+	Wait Until Screen Contains    filled_text_field.png
 
+Local typing of special keys 
+	[Template]    Local typing of special keys
+	a    CTRL
+	HOME    SHIFT
+	
 Local call should be made if server connection is closed
     Enable Debugging
     ${port}    Start Remote Server
     Initialize Connection    http://127.0.0.1:${port}/
     Stop Remote Server
     Capture Screenshot
-	
 	
 Test image wait remotely
 	[Teardown]    Log results and kill process
@@ -57,6 +62,7 @@ Remote input of text
 	Start test application
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png
+    Wait Until Screen Contains    filled_text_field.png
 	
 Test remote screenshot capture to other remote server
     [Teardown]    Log results and kill process
@@ -65,3 +71,14 @@ Test remote screenshot capture to other remote server
     Initialize Connection    http://127.0.0.1:62022/
 	Enable Debugging
     Capture Screenshot
+
+****Keyword****
+Local typing of special keys    
+    [Arguments]    ${keys}    @{modifiers}
+    [Teardown]    Log results and kill process
+    Start test application
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    empty_text_field.png
+	Wait Until Screen Contains    filled_text_field.png
+	Type Keys    ${keys}    @{modifiers}
+	Wait Until Screen Contains    filled_and_selected_text_field.png    0.9
