@@ -50,6 +50,12 @@ public class Client implements RemoteSikuliLibraryInterface {
 		locator.setRemote(true);
 		this.executeRemoteCall("waitUntilScreenContains", imageNameOrText, locator.getSimilarity(), locator.isRemote(), locator.getImageData());
 	}
+	
+	public void inputText(String text, String imageNameOrText, Locator locator) {
+		locator.encodeImageToBase64(imageNameOrText);
+		locator.setRemote(true);
+		this.executeRemoteCall("inputText", text, imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
+	}
 
 	@SuppressWarnings("rawtypes")
 	private String executeRemoteCall(String keyword, Object... params) {

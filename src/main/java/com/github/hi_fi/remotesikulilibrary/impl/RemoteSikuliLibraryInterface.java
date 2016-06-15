@@ -12,4 +12,6 @@ public interface RemoteSikuliLibraryInterface {
 	
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator);
 
+	public void inputText(String text, String imageNameOrText, Locator locator);
+
 }

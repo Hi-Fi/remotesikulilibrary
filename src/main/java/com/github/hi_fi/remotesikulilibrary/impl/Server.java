@@ -51,17 +51,6 @@ public class Server implements RemoteSikuliLibraryInterface {
 		}
 	}
 
-	private byte[] captureScreenshot() {
-		String temporaryScreenshotPath = new Screen().capture().getFile();
-		SikuliLogger.logDebug("Temporary image stored to: " + temporaryScreenshotPath);
-		try {
-			return FileUtils.readFileToByteArray(new File(temporaryScreenshotPath));
-		} catch (IOException e) {
-			SikuliLogger.logDebug(e.getStackTrace());
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator) {
 		SikuliLogger.logDebug("Waiting for item at Server class");
 		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
@@ -76,6 +65,33 @@ public class Server implements RemoteSikuliLibraryInterface {
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
+		}
+	}
+	
+	public void inputText(String text, String imageNameOrText, Locator locator) {
+		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
+		try {
+			SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
+			if (locator.isImage()) {
+				new Screen().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()).targetOffset(locator.getxOffset(), locator.getyOffset()));
+			} else if (locator.isText()){
+				new Screen().click(imageNameOrText);
+			}
+		} catch (FindFailed e) {
+			this.handleFindFailed(locator.isRemote(), e);
+		}
+		
+		new Screen().paste(text);
+	}
+	
+	private byte[] captureScreenshot() {
+		String temporaryScreenshotPath = new Screen().capture().getFile();
+		SikuliLogger.logDebug("Temporary image stored to: " + temporaryScreenshotPath);
+		try {
+			return FileUtils.readFileToByteArray(new File(temporaryScreenshotPath));
+		} catch (IOException e) {
+			SikuliLogger.logDebug(e.getStackTrace());
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
