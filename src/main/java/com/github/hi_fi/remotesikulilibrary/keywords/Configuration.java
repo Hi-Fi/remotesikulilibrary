@@ -35,20 +35,22 @@ public class Configuration {
 	
 	@RobotKeyword("Set directory containing Sikuli's test images.\n\n"
 				 +"Default directory is <i>testdata/images</i>.")
+	@ArgumentNames("Path to test images")
 	public void setTestImageDirectory(String imageDirectory) {
 		Helper.setImageDirectory(imageDirectory);
 	}
 	
 	@RobotKeyword("Set directory where screenshots are stored.\n\n"
 			 +"Default directory is <i>images</i>.")
+	@ArgumentNames("Path to store screenshots")
 	public void setScreenshotDirectory(String screenshotDirectory) {
 		Helper.setScreenshotDirectory(screenshotDirectory);
 	}
 	
 	@RobotKeyword("Starts remote server. Mainly used for testing.\n\n"
 			     +"Returns server port.")
-	@ArgumentNames({"Remote port=selected automatically"})
-	public int startRemoteServer(String... port) {
+	@ArgumentNames({"*Remote port=selected automatically"})
+	public int startRemoteServer(String[] port) {
 		RemoteServer.configureLogging();
 		RemoteServer server = new RemoteServer();
 		remoteServer = server;

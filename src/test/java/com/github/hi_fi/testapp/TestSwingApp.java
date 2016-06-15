@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class TestSwingApp {
 
@@ -18,6 +19,8 @@ public class TestSwingApp {
 	private JLabel headerLabel;
 	private JLabel statusLabel;
 	private JPanel controlPanel;
+	private JPanel textPanel;
+	private JTextField textField;
 
 	public TestSwingApp() {
 		prepareGUI();
@@ -32,7 +35,7 @@ public class TestSwingApp {
 	private void prepareGUI() {
 		mainFrame = new JFrame("Test application for Remote Sikuli Library");
 		mainFrame.setSize(400, 400);
-		mainFrame.setLayout(new GridLayout(3, 1));
+		mainFrame.setLayout(new GridLayout(4, 1));
 
 		headerLabel = new JLabel("", JLabel.CENTER);
 		statusLabel = new JLabel("", JLabel.CENTER);
@@ -45,11 +48,16 @@ public class TestSwingApp {
 		});
 		controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
+		
+		textPanel = new JPanel();
+		textPanel.setLayout(new FlowLayout());
 
 		mainFrame.add(headerLabel);
 		mainFrame.add(controlPanel);
 		mainFrame.add(statusLabel);
+		mainFrame.add(textPanel);
 		mainFrame.setVisible(true);
+		
 	}
 
 	private void showEventDemo() {
@@ -58,6 +66,8 @@ public class TestSwingApp {
 		JButton okButton = new JButton("OK");
 		JButton submitButton = new JButton("Submit");
 		JButton cancelButton = new JButton("Cancel");
+		JLabel label = new JLabel("Test field: ", JLabel.RIGHT);
+		textField = new JTextField(20);
 
 		okButton.setActionCommand("OK");
 		submitButton.setActionCommand("Submit");
@@ -66,11 +76,14 @@ public class TestSwingApp {
 		okButton.addActionListener(new ButtonClickListener());
 		submitButton.addActionListener(new ButtonClickListener());
 		cancelButton.addActionListener(new ButtonClickListener());
-
+		
 		controlPanel.add(okButton);
 		controlPanel.add(submitButton);
 		controlPanel.add(cancelButton);
 
+		textPanel.add(label);
+		textPanel.add(textField);
+		
 		mainFrame.setVisible(true);
 	}
 

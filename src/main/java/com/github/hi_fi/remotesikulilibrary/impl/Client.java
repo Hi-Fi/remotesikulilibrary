@@ -1,15 +1,13 @@
 package com.github.hi_fi.remotesikulilibrary.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.DecodingException;
 import org.apache.xmlrpc.XmlRpcException;
 
+import com.github.hi_fi.remotesikulilibrary.DTO.Locator;
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
 import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
@@ -21,7 +19,7 @@ import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
  */
 public class Client implements RemoteSikuliLibraryInterface {
 
-	public String captureScreenshot(Object... remote) {
+	public String captureScreenshot(String[] remote) {
 		SikuliLogger.logDebug("Calling screenshot capture from client class");
 		String response = this.executeRemoteCall("captureScreenshot", true);
 		try {
@@ -37,21 +35,29 @@ public class Client implements RemoteSikuliLibraryInterface {
 		this.executeRemoteCall("enableDebugging");
 	}
 
-	public void clickItem(String imageNameOrText, double similarity, int xOffset, int yOffset, boolean remote,
-			Object... imageData) {
-		Object image = "";
-		try {
-			SikuliLogger.logDebug("Checking if " + Helper.getImageDirectory() + "/" + imageNameOrText + " is image");
-			File localImage = new File(Helper.getImageDirectory() + "/" + imageNameOrText);
-			if (localImage.exists()) {
-				image = Base64.encode(FileUtils.readFileToByteArray(localImage));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.executeRemoteCall("clickItem", imageNameOrText, similarity, xOffset, yOffset, true, image);
+	public void clickItem(String imageNameOrText, Locator locator) {
+		locator.encodeImageToBase64(imageNameOrText);
+		locator.setRemote(true);
+		
+		this.executeRemoteCall("clickItem", imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
+	}
+	
+	public void waitUntilScreenContains(String imageNameOrText, Locator locator) {
+		locator.encodeImageToBase64(imageNameOrText);
+		locator.setRemote(true);
+		this.executeRemoteCall("waitUntilScreenContains", imageNameOrText, locator.getSimilarity(), locator.isRemote(), locator.getImageData());
+	}
+	
+	public void inputText(String text, String imageNameOrText, Locator locator) {
+		locator.encodeImageToBase64(imageNameOrText);
+		locator.setRemote(true);
+		this.executeRemoteCall("inputText", text, imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
 	}
 
+	public void typeKeys(String keys, String[] modifiers) {
+		this.executeRemoteCall("typeKeys", keys, modifiers);
+	}
+	
 	@SuppressWarnings("rawtypes")
 	private String executeRemoteCall(String keyword, Object... params) {
 		Map response = new HashMap();
@@ -87,20 +93,5 @@ public class Client implements RemoteSikuliLibraryInterface {
 		} else {
 			return "No return value";
 		}
-	}
-
-	public void waitUntilScreenContains(String imageNameOrText, double similarity, boolean remote,
-			Object... imageData) {
-		Object image = "";
-		try {
-			SikuliLogger.logDebug("Checking if " + Helper.getImageDirectory() + "/" + imageNameOrText + " is image");
-			File localImage = new File(Helper.getImageDirectory() + "/" + imageNameOrText);
-			if (localImage.exists()) {
-				image = Base64.encode(FileUtils.readFileToByteArray(localImage));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.executeRemoteCall("waitUntilScreenContains", imageNameOrText, similarity, true, image);
 	}
 }
