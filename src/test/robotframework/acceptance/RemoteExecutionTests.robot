@@ -1,8 +1,9 @@
 *** Settings ***
 Resource    common.robot
 Suite Setup    Set Test Image Directory    .${/}src${/}test${/}resources${/}testImages    
-Test Setup    Prepare Test Environment
+Test Setup    Prepare test environment for remote tests
 Test Teardown    Log results and kill process
+Force Tags    Remote
 
 *** Test Cases ***
 Test image wait remotely
@@ -21,13 +22,19 @@ Remote input of text
 Test remote screenshot capture to other remote server
     Capture Screenshot
     
+Test image clicks locally
+    [Template]   Click images
+    Click Item    ok_button.png   ok_clicked.png
+    Double Click Item    cancel_button.png    cancel_double_clicked.png
+    Right Click Item    submit_button.png    submit_right_clicked.png
+    
 Remote typing of special keys 
 	[Template]    Remote typing of special keys
 	a    CTRL
 	HOME    SHIFT
 
 ****Keyword****
-Prepare test environment for Remote tests
+Prepare test environment for remote tests
     Start test server
     Initialize Connection    http://127.0.0.1:62022/
     Start test application

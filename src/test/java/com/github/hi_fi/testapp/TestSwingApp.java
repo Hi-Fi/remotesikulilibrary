@@ -4,6 +4,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -12,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class TestSwingApp {
 
@@ -73,9 +77,9 @@ public class TestSwingApp {
 		submitButton.setActionCommand("Submit");
 		cancelButton.setActionCommand("Cancel");
 
-		okButton.addActionListener(new ButtonClickListener());
-		submitButton.addActionListener(new ButtonClickListener());
-		cancelButton.addActionListener(new ButtonClickListener());
+		okButton.addMouseListener(this.getClickListener("OK"));
+		submitButton.addMouseListener(this.getClickListener("Submit"));
+		cancelButton.addMouseListener(this.getClickListener("Cancel"));
 		
 		controlPanel.add(okButton);
 		controlPanel.add(submitButton);
@@ -86,17 +90,21 @@ public class TestSwingApp {
 		
 		mainFrame.setVisible(true);
 	}
-
-	private class ButtonClickListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			String command = e.getActionCommand();
-			if (command.equals("OK")) {
-				statusLabel.setText("Ok Button clicked.");
-			} else if (command.equals("Submit")) {
-				statusLabel.setText("Submit Button clicked.");
-			} else {
-				statusLabel.setText("Cancel Button clicked.");
-			}
-		}
+	
+	private MouseAdapter getClickListener(final String buttonName) {
+		return new MouseAdapter(){
+		    @Override
+		    public void mouseClicked(MouseEvent e){
+		    	String times = "once";
+		    	String button = "left";
+		    	if (SwingUtilities.isRightMouseButton(e)) {
+		    		button = "right";
+		    	}
+		        if(e.getClickCount()==2){
+		            times = "twice";
+		        }
+		        statusLabel.setText(buttonName+" Button clicked "+times+" with "+button+" button.");
+		    }
+		};
 	}
 }

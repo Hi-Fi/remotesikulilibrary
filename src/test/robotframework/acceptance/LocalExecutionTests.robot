@@ -1,28 +1,24 @@
 *** Settings ***
 Resource    common.robot
 Suite Setup    Set Test Image Directory    .${/}src${/}test${/}resources${/}testImages    
+Test Setup    Start test application
+Test Teardown    Log results and kill process
+Force Tags    Local
 
 *** Test Cases ***
 Capture screenshot locally
-    Enable Debugging
     Capture Screenshot
 	
 Test image wait locally
-	[Teardown]    Log results and kill process
-    Enable OCR
-	Start test application
 	Wait Until Screen Contains    buttons.png
 	
-Test image click locally
-    [Teardown]    Log results and kill process
-    Start test application
-	Wait Until Screen Contains    buttons.png
-	Click Item    ok_button.png
-	Wait Until Screen Contains    ok_clicked.png
+Test image clicks locally
+    [Template]   Click images
+    Click Item    ok_button.png   ok_clicked.png
+    Double Click Item    cancel_button.png    cancel_double_clicked.png
+    Right Click Item    submit_button.png    submit_right_clicked.png
 	
 Local input of text 
-    [Teardown]    Log results and kill process
-    Start test application
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png
 	Wait Until Screen Contains    filled_text_field.png
@@ -33,7 +29,6 @@ Local typing of special keys
 	HOME    SHIFT
 	
 Local call should be made if server connection is closed
-    Enable Debugging
     ${port}    Start Remote Server
     Initialize Connection    http://127.0.0.1:${port}/
     Stop Remote Server
