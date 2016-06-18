@@ -6,5 +6,8 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 
+##skip installation step
+install: true
+
 ## Run Integration tests
 script: "mvn verify"

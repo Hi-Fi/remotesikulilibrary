@@ -149,6 +149,41 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>org.robotframework</groupId>
+						<artifactId>robotframework-maven-plugin</artifactId>
+						<version>1.4.6</version>
+						<executions>
+							<execution>
+								<id>html</id>
+								<phase>package</phase>
+								<goals>
+									<goal>libdoc</goal>
+								</goals>
+								<configuration>
+									<libdoc>
+										<outputDirectory>${project.build.directory}</outputDirectory>
+										<outputFile>${keywords.class}.html</outputFile>
+										<libraryOrResourceFile>${keywords.class}</libraryOrResourceFile>
+									</libdoc>
+								</configuration>
+							</execution>
+							<execution>
+								<id>xml</id>
+								<phase>package</phase>
+								<goals>
+									<goal>libdoc</goal>
+								</goals>
+								<configuration>
+									<libdoc>
+										<outputDirectory>${project.build.directory}</outputDirectory>
+										<outputFile>${keywords.class}.xml</outputFile>
+										<libraryOrResourceFile>${keywords.class}</libraryOrResourceFile>
+									</libdoc>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -193,34 +228,6 @@
 								<variable>maven.test.classpath:${maven.test.classpath}</variable>
 								<classpath />
 							</variables>
-						</configuration>
-					</execution>
-					<execution>
-						<id>html</id>
-						<phase>package</phase>
-						<goals>
-							<goal>libdoc</goal>
-						</goals>
-						<configuration>
-							<libdoc>
-								<outputDirectory>${project.build.directory}</outputDirectory>
-								<outputFile>${keywords.class}.html</outputFile>
-								<libraryOrResourceFile>${keywords.class}</libraryOrResourceFile>
-							</libdoc>
-						</configuration>
-					</execution>
-					<execution>
-						<id>xml</id>
-						<phase>package</phase>
-						<goals>
-							<goal>libdoc</goal>
-						</goals>
-						<configuration>
-							<libdoc>
-								<outputDirectory>${project.build.directory}</outputDirectory>
-								<outputFile>${keywords.class}.xml</outputFile>
-								<libraryOrResourceFile>${keywords.class}</libraryOrResourceFile>
-							</libdoc>
 						</configuration>
 					</execution>
 					<execution>
