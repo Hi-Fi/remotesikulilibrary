@@ -54,6 +54,38 @@ public class Server implements RemoteSikuliLibraryInterface {
 			this.handleFindFailed(locator.isRemote(), e);
 		}
 	}
+	
+	public void doubleClickItem(String imageNameOrText, Locator locator) {
+		SikuliLogger.logDebug("Clicking item at Server class");
+		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
+		try {
+			SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
+			if (locator.isImage()) {
+				new Screen().doubleClick(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
+						.targetOffset(locator.getxOffset(), locator.getyOffset()));
+			} else if (locator.isText()) {
+				new Screen().doubleClick(imageNameOrText);
+			}
+		} catch (FindFailed e) {
+			this.handleFindFailed(locator.isRemote(), e);
+		}
+	}
+	
+	public void rightClickItem(String imageNameOrText, Locator locator) {
+		SikuliLogger.logDebug("Clicking item at Server class");
+		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
+		try {
+			SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
+			if (locator.isImage()) {
+				new Screen().rightClick(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
+						.targetOffset(locator.getxOffset(), locator.getyOffset()));
+			} else if (locator.isText()) {
+				new Screen().rightClick(imageNameOrText);
+			}
+		} catch (FindFailed e) {
+			this.handleFindFailed(locator.isRemote(), e);
+		}
+	}
 
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator) {
 		SikuliLogger.logDebug("Waiting for item at Server class");

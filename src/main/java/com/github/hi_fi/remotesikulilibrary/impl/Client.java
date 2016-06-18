@@ -20,12 +20,10 @@ import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 public class Client implements RemoteSikuliLibraryInterface {
 
 	public String captureScreenshot(String[] remote) {
-		SikuliLogger.logDebug("Calling screenshot capture from client class");
-		String response = this.executeRemoteCall("captureScreenshot", true);
 		try {
-			return Helper.writeImageByteArrayToDisk(Base64.decode(response));
+			return Helper.writeImageByteArrayToDisk(Base64.decode(this.executeRemoteCall("captureScreenshot", true)));
 		} catch (DecodingException e) {
-			SikuliLogger.logDebug("Decoding of remote image failed");
+			SikuliLogger.logError("Decoding of remote image failed");
 			SikuliLogger.logDebug(e.getStackTrace());
 			throw new RuntimeException(e.getMessage());
 		}
@@ -40,6 +38,20 @@ public class Client implements RemoteSikuliLibraryInterface {
 		locator.setRemote(true);
 		
 		this.executeRemoteCall("clickItem", imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
+	}
+	
+	public void doubleClickItem(String imageNameOrText, Locator locator) {
+		locator.encodeImageToBase64(imageNameOrText);
+		locator.setRemote(true);
+		
+		this.executeRemoteCall("doubleClickItem", imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
+	}
+	
+	public void rightClickItem(String imageNameOrText, Locator locator) {
+		locator.encodeImageToBase64(imageNameOrText);
+		locator.setRemote(true);
+		
+		this.executeRemoteCall("rightClickItem", imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
 	}
 	
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator) {
