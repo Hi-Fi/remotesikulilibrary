@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.ws.commons.util.Base64;
-import org.sikuli.script.Env;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Key;
 import org.sikuli.script.Pattern;
@@ -106,22 +105,24 @@ public class Server implements RemoteSikuliLibraryInterface {
 
 	public void inputText(String text, String imageNameOrText, Locator locator) {
 		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
-		try {
-			SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
-			if (locator.isImage()) {
-				new Screen().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
-						.targetOffset(locator.getxOffset(), locator.getyOffset()));
-			} else if (locator.isText()) {
-				new Screen().click(imageNameOrText);
+		if (imageNameOrText != null) {
+			try {
+				SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
+				if (locator.isImage()) {
+					new Screen().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
+							.targetOffset(locator.getxOffset(), locator.getyOffset()));
+				} else if (locator.isText()) {
+					new Screen().click(imageNameOrText);
+				}
+			} catch (FindFailed e) {
+				this.handleFindFailed(locator.isRemote(), e);
 			}
-		} catch (FindFailed e) {
-			this.handleFindFailed(locator.isRemote(), e);
 		}
 
 		new Screen().paste(text);
 	}
 
-	public void typeKeys(String keys, String[] modifiers) {
+	public void typeKeys(String keys, String... modifiers) {
 		boolean numLockActive = Key.isLockOn(Key.C_NUM_LOCK);
 		Screen screen = new Screen();
 		if (numLockActive) {
@@ -157,8 +158,8 @@ public class Server implements RemoteSikuliLibraryInterface {
 			if (!isDebug) {
 				Helper.enableDebug();
 			}
-			// SikuliLogger.logDebug("-IMAGEDATA-" +
-			// Base64.encode(this.captureScreenshot()) + "-IMAGEDATA-");
+			SikuliLogger.logDebug("-IMAGEDATA-" +
+			Base64.encode(this.captureScreenshot()) + "-IMAGEDATA-");
 			if (!isDebug) {
 				Helper.disableDebug();
 			}

@@ -27,6 +27,13 @@ Local typing of special keys
 	[Template]    Local typing of special keys
 	a    CTRL
 	HOME    SHIFT
+
+Local input and replace of text 
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    empty_text_field.png
+	Wait Until Screen Contains    filled_text_field.png	
+	Replace Text In Field    ${EMPTY}    filled_text_field.png
+	Wait Until Screen Contains    empty_text_field.png
 	
 Local call should be made if server connection is closed
     ${port}    Start Remote Server

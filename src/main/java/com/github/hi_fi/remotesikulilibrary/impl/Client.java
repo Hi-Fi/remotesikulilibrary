@@ -66,7 +66,7 @@ public class Client implements RemoteSikuliLibraryInterface {
 		this.executeRemoteCall("inputText", text, imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
 	}
 
-	public void typeKeys(String keys, String[] modifiers) {
+	public void typeKeys(String keys, String...modifiers) {
 		this.executeRemoteCall("typeKeys", keys, modifiers);
 	}
 	

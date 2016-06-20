@@ -14,7 +14,7 @@ public interface RemoteSikuliLibraryInterface {
 
 	public void inputText(String text, String imageNameOrText, Locator locator);
 
-	public void typeKeys(String text, String[] modifiers);
+	public void typeKeys(String text, String...modifiers);
 	
 	public void doubleClickItem(String imageNameOrText, Locator locator);
 	

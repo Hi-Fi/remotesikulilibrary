@@ -16,7 +16,6 @@ public class Keyboard {
 	@ArgumentNames({ "Text to type", "Image name or text to click", "Similarity of images=0.7",
 			"X offset from centre of image=0", "Y offset from centre of image=0", "*Technical arguments" })
 	public void inputText(String text, String imageNameOrText, String[] arguments) {
-		SikuliLogger.logDebug("Parsing parameter from arguments. There's " + arguments.length + " parameters to parse");
 		Locator locator = new Locator(arguments);
 		Helper.getLibrary().inputText(text, imageNameOrText, locator);
 	}
@@ -32,4 +31,16 @@ public class Keyboard {
 	public void typeKeys(String text, String[] modifiers) {
 		Helper.getLibrary().typeKeys(text, modifiers);
 	}
+	
+	@RobotKeyword("Inputs given text to given field by selecting all text first. Input is pasted to field, which allows support for international characters\n\n"
+			+ "Locator is same than in item click/wait, so same variables available")
+	@ArgumentNames({ "Text to type", "Image name or text to click", "Similarity of images=0.7",
+			"X offset from centre of image=0", "Y offset from centre of image=0", "*Technical arguments" })
+	public void replaceTextInField(String text, String imageNameOrText, String[] arguments) {
+		Locator locator = new Locator(arguments);
+		Helper.getLibrary().clickItem(imageNameOrText, locator);
+		Helper.getLibrary().typeKeys("a", "CTRL");
+		Helper.getLibrary().inputText(text, null, locator);
+	}
+
 }
