@@ -11,6 +11,8 @@ public interface RemoteSikuliLibraryInterface {
 	public void clickItem(String imageNameOrText, Locator locator);
 	
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator);
+	
+	public void waitUntilScreenDoesNotContain(String imageNameOrText, Locator locator);
 
 	public void inputText(String text, String imageNameOrText, Locator locator);
 
@@ -19,5 +21,12 @@ public interface RemoteSikuliLibraryInterface {
 	public void doubleClickItem(String imageNameOrText, Locator locator);
 	
 	public void rightClickItem(String imageNameOrText, Locator locator);
+	
+	public void startApp(String appCommand);
+	
+	public void closeApp(String appCommand);
+	
+	public void switchApp(String appCommand);
+	
 
 }

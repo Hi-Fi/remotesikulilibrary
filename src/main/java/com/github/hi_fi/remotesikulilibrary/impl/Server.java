@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.ws.commons.util.Base64;
+import org.sikuli.script.App;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Key;
 import org.sikuli.script.Pattern;
@@ -87,7 +88,6 @@ public class Server implements RemoteSikuliLibraryInterface {
 	}
 
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator) {
-		SikuliLogger.logDebug("Waiting for item at Server class");
 		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
 		try {
 			SikuliLogger.logDebug("Waiting for item: " + imageNameOrText);
@@ -100,6 +100,22 @@ public class Server implements RemoteSikuliLibraryInterface {
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
+		}
+	}
+	
+	public void waitUntilScreenDoesNotContain(String imageNameOrText, Locator locator) {
+		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
+		boolean vanished = true;
+		Screen screen = new Screen();
+		screen.setAutoWaitTimeout(Helper.getWaitTimeout());
+		if (locator.isImage()) {
+			vanished = screen.waitVanish(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
+		} else if (locator.isText()) {
+			vanished = screen.waitVanish(imageNameOrText);
+		}
+		
+		if (!vanished) {
+			throw new RuntimeException("Given item didn't vanished in expected time");
 		}
 	}
 
@@ -137,7 +153,18 @@ public class Server implements RemoteSikuliLibraryInterface {
 		if (numLockActive) {
 			screen.type(Key.NUM_LOCK);
 		}
+	}
+	
+	public void startApp(String appCommand) {
+		App.open(appCommand);
+	}
 
+	public void closeApp(String appCommand) {
+		App.close(appCommand);
+	}
+
+	public void switchApp(String appCommand) {
+		App.focus(appCommand);
 	}
 
 	private byte[] captureScreenshot() {

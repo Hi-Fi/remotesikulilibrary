@@ -20,9 +20,14 @@ public class Screen {
 	@RobotKeyword("Wait until screen contains given item (image or text (of OCR is enabled))")
 	@ArgumentNames({"Image or text to wait", "Similarity of images=0.7", "*Technical arguments"})
 	public void waitUntilScreenContains(String imageNameOrText, String[] arguments) {
-		SikuliLogger.log("Test");
 		Locator locator = new Locator(arguments);
 		Helper.getLibrary().waitUntilScreenContains(imageNameOrText, locator);
 	}
-
+	
+	@RobotKeyword("Wait until screen doesn't contains given item (image or text (of OCR is enabled))")
+	@ArgumentNames({"Image or text to wait", "Similarity of images=0.7", "*Technical arguments"})
+	public void waitUntilScreenDoesNotContains(String imageNameOrText, String[] arguments) {
+		Locator locator = new Locator(arguments);
+		Helper.getLibrary().waitUntilScreenDoesNotContain(imageNameOrText, locator);
+	}
 }
