@@ -77,7 +77,7 @@ public class Client implements RemoteSikuliLibraryInterface {
 	}
 	
 	public int startApp(String appCommand) {
-		return Integer.parseInt(this.executeRemoteCall("startApp", appCommand));
+		return Integer.parseInt(this.executeRemoteCall("openApp", appCommand));
 		
 	}
 

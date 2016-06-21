@@ -58,11 +58,7 @@ Local controlling of application
     Close App    ${pid}
     [Teardown]    Close opened apps
 
-****Keyword****
-Close opened apps
-    Close App    ${pid}
-    Close App    ${pid2}
-    
+****Keyword****  
 Local typing of special keys    
     [Arguments]    ${keys}    @{modifiers}
     [Teardown]    Log results and kill process
