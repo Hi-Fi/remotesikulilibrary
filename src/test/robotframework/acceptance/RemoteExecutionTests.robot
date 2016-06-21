@@ -18,6 +18,11 @@ Remote input of text
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png
     Wait Until Screen Contains    filled_text_field.png
+
+Local check that screen doesn't contain item
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    empty_text_field.png
+	Wait Until Screen Does Not Contain    empty_text_field.png    0.8
 	
 Test remote screenshot capture to other remote server
     Capture Screenshot
