@@ -11,8 +11,8 @@ public class Apps {
 	
 	@RobotKeyword("Starts application. Application can be given as command (if in PATH) or with full path.")
 	@ArgumentNames({"Application to open"})
-	public void openApp(String appPath) {
-		Helper.getLibrary().startApp(appPath);
+	public int openApp(String appPath) {
+		return Helper.getLibrary().startApp(appPath);
 	}
 	
 	@RobotKeyword("Closes given application.\n\n"

@@ -22,7 +22,7 @@ public interface RemoteSikuliLibraryInterface {
 	
 	public void rightClickItem(String imageNameOrText, Locator locator);
 	
-	public void startApp(String appCommand);
+	public int startApp(String appCommand);
 	
 	public void closeApp(String appCommand);
 	

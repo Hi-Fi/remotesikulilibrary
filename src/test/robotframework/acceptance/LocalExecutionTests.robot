@@ -40,8 +40,29 @@ Local call should be made if server connection is closed
     Initialize Connection    http://127.0.0.1:${port}/
     Stop Remote Server
     Capture Screenshot
+    
+Local controlling of application
+    [Setup]    NONE
+    ${pid}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "First app"
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Set Test Variable    ${pid}    ${pid}
+    ${pid2}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "Focus test app"
+    Wait Until Screen Contains    focus_test_app_title.png    0.8
+    Set Test Variable    ${pid2}    ${pid2}
+    Switch App    ${pid}
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Switch App    ${pid2}
+    Wait Until Screen Contains    focus_test_app_title.png    0.8
+    Close App    ${pid2}
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Close App    ${pid}
+    [Teardown]    Close opened apps
 
 ****Keyword****
+Close opened apps
+    Close App    ${pid}
+    Close App    ${pid2}
+    
 Local typing of special keys    
     [Arguments]    ${keys}    @{modifiers}
     [Teardown]    Log results and kill process

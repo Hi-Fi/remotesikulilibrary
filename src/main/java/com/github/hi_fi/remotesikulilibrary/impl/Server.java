@@ -115,6 +115,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 		}
 		
 		if (!vanished) {
+			this.captureScreenshotInError(locator.isRemote());
 			throw new RuntimeException("Given item didn't vanished in expected time");
 		}
 	}
@@ -155,16 +156,29 @@ public class Server implements RemoteSikuliLibraryInterface {
 		}
 	}
 	
-	public void startApp(String appCommand) {
-		App.open(appCommand);
+	public int startApp(String appCommand) {
+		return App.open(appCommand).getPID();
 	}
 
 	public void closeApp(String appCommand) {
-		App.close(appCommand);
+		if (isInteger(appCommand)) {
+			try {
+				new App(Integer.parseInt(appCommand)).close();
+			} catch (NullPointerException e) {
+				SikuliLogger.log("Application not found with given PID. Maybe it's closed earlier?");
+				SikuliLogger.logDebug(e.getStackTrace());
+			}
+		} else {
+			App.close(appCommand);
+		}
 	}
 
 	public void switchApp(String appCommand) {
-		App.focus(appCommand);
+		if (isInteger(appCommand)) {
+			new App(Integer.parseInt(appCommand)).focus();
+		} else {
+			App.focus(appCommand);
+		}
 	}
 
 	private byte[] captureScreenshot() {
@@ -179,6 +193,12 @@ public class Server implements RemoteSikuliLibraryInterface {
 	}
 
 	private void handleFindFailed(boolean remote, FindFailed e) {
+		this.captureScreenshotInError(remote);
+		SikuliLogger.logDebug(e.getStackTrace());
+		throw new RuntimeException(e.getMessage());
+	}
+	
+	private void captureScreenshotInError(boolean remote) {
 		if (remote) {
 			SikuliLogger.logError("Image/text not found at remote computer. Screenshot below.");
 			boolean isDebug = Helper.isDebug();
@@ -194,7 +214,17 @@ public class Server implements RemoteSikuliLibraryInterface {
 			SikuliLogger.logError("Image/text not found at local computer. Screenshot below.");
 			SikuliLogger.logImage(Helper.writeImageByteArrayToDisk(this.captureScreenshot()));
 		}
-		SikuliLogger.logDebug(e.getStackTrace());
-		throw new RuntimeException(e.getMessage());
+	}
+	
+	private boolean isInteger(String value) {
+		boolean isInteger = false;
+		try {
+			Integer.parseInt(value);
+			isInteger = true;
+		} catch (NumberFormatException e) {
+			
+		}
+		
+		return isInteger;
 	}
 }
