@@ -20,3 +20,7 @@ Click images
     [Arguments]    ${Keyword to test}    ${button to click}    ${expected outcome}
     Run Keyword    ${Keyword to test}    ${button to click}
 	Wait Until Screen Contains    ${expected outcome}    0.9
+	
+Close opened apps
+    Close App    ${pid}
+    Close App    ${pid2}

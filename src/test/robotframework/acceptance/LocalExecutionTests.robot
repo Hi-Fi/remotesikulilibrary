@@ -22,19 +22,48 @@ Local input of text
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png
 	Wait Until Screen Contains    filled_text_field.png
+	
+Local check that screen doesn't contain item
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    empty_text_field.png
+	Wait Until Screen Does Not Contain    empty_text_field.png    0.8
 
 Local typing of special keys 
 	[Template]    Local typing of special keys
 	a    CTRL
 	HOME    SHIFT
+
+Local input and replace of text 
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    empty_text_field.png
+	Wait Until Screen Contains    filled_text_field.png	
+	Replace Text In Field    ${EMPTY}    filled_text_field.png
+	Wait Until Screen Contains    empty_text_field.png
 	
 Local call should be made if server connection is closed
     ${port}    Start Remote Server
     Initialize Connection    http://127.0.0.1:${port}/
     Stop Remote Server
     Capture Screenshot
+    
+Local controlling of application
+    [Setup]    NONE
+    ${pid}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "First app"
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Set Test Variable    ${pid}    ${pid}
+    ${pid2}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "Focus test app"
+    Wait Until Screen Contains    focus_test_app_title.png    0.8
+    Set Test Variable    ${pid2}    ${pid2}
+    Switch App    ${pid}
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Switch App    ${pid2}
+    Wait Until Screen Contains    focus_test_app_title.png    0.8
+    Close App    ${pid2}
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Close App    ${pid}
+    [Teardown]    Close opened apps
 
-****Keyword****
+****Keyword****  
 Local typing of special keys    
     [Arguments]    ${keys}    @{modifiers}
     [Teardown]    Log results and kill process

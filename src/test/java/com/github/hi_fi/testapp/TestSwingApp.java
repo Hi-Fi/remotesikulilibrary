@@ -1,5 +1,6 @@
 package com.github.hi_fi.testapp;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -25,19 +26,23 @@ public class TestSwingApp {
 	private JPanel controlPanel;
 	private JPanel textPanel;
 	private JTextField textField;
-
-	public TestSwingApp() {
-		prepareGUI();
+	
+	public TestSwingApp(String title) {
+		prepareGUI(title);
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Starting test app");
-		TestSwingApp testSwingApp = new TestSwingApp();
+		String title = "Test application for Remote Sikuli Library";
+		if (args.length > 0) {
+			title = args[0];
+		}
+		
+		TestSwingApp testSwingApp = new TestSwingApp(title);
 		testSwingApp.showEventDemo();
 	}
 
-	private void prepareGUI() {
-		mainFrame = new JFrame("Test application for Remote Sikuli Library");
+	private void prepareGUI(String title) {
+		mainFrame = new JFrame(title);
 		mainFrame.setSize(400, 400);
 		mainFrame.setLayout(new GridLayout(4, 1));
 

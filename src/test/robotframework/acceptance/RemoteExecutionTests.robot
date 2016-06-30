@@ -18,11 +18,16 @@ Remote input of text
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png
     Wait Until Screen Contains    filled_text_field.png
+
+Local check that screen doesn't contain item
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    empty_text_field.png
+	Wait Until Screen Does Not Contain    empty_text_field.png    0.8
 	
 Test remote screenshot capture to other remote server
     Capture Screenshot
     
-Test image clicks locally
+Test image clicks remotely
     [Template]   Click images
     Click Item    ok_button.png   ok_clicked.png
     Double Click Item    cancel_button.png    cancel_double_clicked.png
@@ -33,6 +38,21 @@ Remote typing of special keys
 	a    CTRL
 	HOME    SHIFT
 
+Remote controlling of application
+    ${pid}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "First app"
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Set Test Variable    ${pid}    ${pid}
+    ${pid2}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "Focus test app"
+    Wait Until Screen Contains    focus_test_app_title.png    0.8
+    Set Test Variable    ${pid2}    ${pid2}
+    Switch App    ${pid}
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Switch App    ${pid2}
+    Wait Until Screen Contains    focus_test_app_title.png    0.8
+    Close App    ${pid2}
+    Wait Until Screen Contains    first_app_title.png    0.8
+    Close App    ${pid}
+    
 ****Keyword****
 Prepare test environment for remote tests
     Start test server

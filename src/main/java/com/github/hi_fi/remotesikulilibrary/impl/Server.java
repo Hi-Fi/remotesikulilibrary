@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.ws.commons.util.Base64;
-import org.sikuli.script.Env;
+import org.sikuli.script.App;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Key;
 import org.sikuli.script.Pattern;
@@ -88,7 +88,6 @@ public class Server implements RemoteSikuliLibraryInterface {
 	}
 
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator) {
-		SikuliLogger.logDebug("Waiting for item at Server class");
 		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
 		try {
 			SikuliLogger.logDebug("Waiting for item: " + imageNameOrText);
@@ -103,25 +102,44 @@ public class Server implements RemoteSikuliLibraryInterface {
 			this.handleFindFailed(locator.isRemote(), e);
 		}
 	}
+	
+	public void waitUntilScreenDoesNotContain(String imageNameOrText, Locator locator) {
+		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
+		boolean vanished = true;
+		Screen screen = new Screen();
+		screen.setAutoWaitTimeout(Helper.getWaitTimeout());
+		if (locator.isImage()) {
+			vanished = screen.waitVanish(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
+		} else if (locator.isText()) {
+			vanished = screen.waitVanish(imageNameOrText);
+		}
+		
+		if (!vanished) {
+			this.captureScreenshotInError(locator.isRemote());
+			throw new RuntimeException("Given item didn't vanished in expected time");
+		}
+	}
 
 	public void inputText(String text, String imageNameOrText, Locator locator) {
 		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
-		try {
-			SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
-			if (locator.isImage()) {
-				new Screen().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
-						.targetOffset(locator.getxOffset(), locator.getyOffset()));
-			} else if (locator.isText()) {
-				new Screen().click(imageNameOrText);
+		if (imageNameOrText != null) {
+			try {
+				SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
+				if (locator.isImage()) {
+					new Screen().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
+							.targetOffset(locator.getxOffset(), locator.getyOffset()));
+				} else if (locator.isText()) {
+					new Screen().click(imageNameOrText);
+				}
+			} catch (FindFailed e) {
+				this.handleFindFailed(locator.isRemote(), e);
 			}
-		} catch (FindFailed e) {
-			this.handleFindFailed(locator.isRemote(), e);
 		}
 
 		new Screen().paste(text);
 	}
 
-	public void typeKeys(String keys, String[] modifiers) {
+	public void typeKeys(String keys, String... modifiers) {
 		boolean numLockActive = Key.isLockOn(Key.C_NUM_LOCK);
 		Screen screen = new Screen();
 		if (numLockActive) {
@@ -136,7 +154,31 @@ public class Server implements RemoteSikuliLibraryInterface {
 		if (numLockActive) {
 			screen.type(Key.NUM_LOCK);
 		}
+	}
+	
+	public int startApp(String appCommand) {
+		return App.open(appCommand).getPID();
+	}
 
+	public void closeApp(String appCommand) {
+		if (isInteger(appCommand)) {
+			try {
+				new App(Integer.parseInt(appCommand)).close();
+			} catch (NullPointerException e) {
+				SikuliLogger.log("Application not found with given PID. Maybe it's closed earlier?");
+				SikuliLogger.logDebug(e.getStackTrace());
+			}
+		} else {
+			App.close(appCommand);
+		}
+	}
+
+	public void switchApp(String appCommand) {
+		if (isInteger(appCommand)) {
+			new App(Integer.parseInt(appCommand)).focus();
+		} else {
+			App.focus(appCommand);
+		}
 	}
 
 	private byte[] captureScreenshot() {
@@ -151,14 +193,20 @@ public class Server implements RemoteSikuliLibraryInterface {
 	}
 
 	private void handleFindFailed(boolean remote, FindFailed e) {
+		this.captureScreenshotInError(remote);
+		SikuliLogger.logDebug(e.getStackTrace());
+		throw new RuntimeException(e.getMessage());
+	}
+	
+	private void captureScreenshotInError(boolean remote) {
 		if (remote) {
 			SikuliLogger.logError("Image/text not found at remote computer. Screenshot below.");
 			boolean isDebug = Helper.isDebug();
 			if (!isDebug) {
 				Helper.enableDebug();
 			}
-			// SikuliLogger.logDebug("-IMAGEDATA-" +
-			// Base64.encode(this.captureScreenshot()) + "-IMAGEDATA-");
+			SikuliLogger.logDebug("-IMAGEDATA-" +
+			Base64.encode(this.captureScreenshot()) + "-IMAGEDATA-");
 			if (!isDebug) {
 				Helper.disableDebug();
 			}
@@ -166,7 +214,17 @@ public class Server implements RemoteSikuliLibraryInterface {
 			SikuliLogger.logError("Image/text not found at local computer. Screenshot below.");
 			SikuliLogger.logImage(Helper.writeImageByteArrayToDisk(this.captureScreenshot()));
 		}
-		SikuliLogger.logDebug(e.getStackTrace());
-		throw new RuntimeException(e.getMessage());
+	}
+	
+	private boolean isInteger(String value) {
+		boolean isInteger = false;
+		try {
+			Integer.parseInt(value);
+			isInteger = true;
+		} catch (NumberFormatException e) {
+			
+		}
+		
+		return isInteger;
 	}
 }
