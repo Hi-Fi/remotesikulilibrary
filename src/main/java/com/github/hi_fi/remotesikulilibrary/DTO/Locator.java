@@ -14,8 +14,8 @@ import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 public class Locator {
 	
 	private String imageData = "";
-	private boolean image;
-	private boolean text;
+	private boolean image = false;
+	private boolean text = false;
 	private boolean remote = false;
 	private int xOffset = 0;
 	private int yOffset = 0;
