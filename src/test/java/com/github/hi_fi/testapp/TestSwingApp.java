@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 public class TestSwingApp {
 
 	private JFrame mainFrame;
+	private JLabel applicationLabel;
 	private JLabel headerLabel;
 	private JLabel statusLabel;
 	private JPanel controlPanel;
@@ -44,8 +45,9 @@ public class TestSwingApp {
 	private void prepareGUI(String title) {
 		mainFrame = new JFrame(title);
 		mainFrame.setSize(400, 400);
-		mainFrame.setLayout(new GridLayout(4, 1));
+		mainFrame.setLayout(new GridLayout(5, 1));
 
+		applicationLabel = new JLabel(title, JLabel.CENTER);
 		headerLabel = new JLabel("", JLabel.CENTER);
 		statusLabel = new JLabel("", JLabel.CENTER);
 
@@ -61,6 +63,7 @@ public class TestSwingApp {
 		textPanel = new JPanel();
 		textPanel.setLayout(new FlowLayout());
 
+		mainFrame.add(applicationLabel);
 		mainFrame.add(headerLabel);
 		mainFrame.add(controlPanel);
 		mainFrame.add(statusLabel);
