@@ -7,35 +7,53 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.imgscalr.Scalr;
+import org.sikuli.script.Image;
+import org.sikuli.script.Location;
+
 import com.github.hi_fi.remotesikulilibrary.impl.Server;
+import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 import com.sun.jna.Pointer;
 
 import net.sourceforge.tess4j.TessAPI1;
 import net.sourceforge.tess4j.ITessAPI.TessBaseAPI;
 import net.sourceforge.tess4j.ITessAPI.TessPageIteratorLevel;
-import net.sourceforge.tess4j.util.ImageIOHelper;
 import net.sourceforge.tess4j.util.LoadLibs;
 
 public class TextRecognizer {
 
-	public void findText(String text) {
+	public Location findText(String text) {
 		Server server = new Server();
 		String imageLocation = server.captureScreenshot(new String[]{});
-		this.findTextFromImage(text, imageLocation);
+		List<Location> coordinates = this.findTextFromImage(text, imageLocation);
+		if (coordinates.size() == 0) {
+			throw new RuntimeException("Text "+text+" not found from page");
+		} else {
+			if (coordinates.size() > 1) {
+				SikuliLogger.log("Text found multiple times from page, clicking first occurrence");
+			}
+			return coordinates.get(0);
+		}
 	}
 	
-	public void findTextFromImage(String text, String imageLocation) {
-		File imageData = new File(imageLocation);
+	public List<Location> findTextFromImage(String text, String imageLocation) {
+		List<Location> coordinates = new ArrayList<Location>();
+		File imageFile = new File(imageLocation);
 		String datapath = LoadLibs.extractTessResources("tessdata").getAbsolutePath();
 		String language = "eng";
 		TessBaseAPI handle = TessAPI1.TessBaseAPICreate();
 		BufferedImage image;
 		try {
-			image = ImageIO.read(imageData);
-			ByteBuffer buf = ImageIOHelper.convertImageData(image);
+			image = ImageIO.read(imageFile);
+			image = this.enlargeImageForOCR(image);
+			// This also "fixes" the image; if resizing is done after this, there's memory access error
+			image = Image.convertImageToGrayscale(image);
+			ByteBuffer buf = Image.convertImageData(image);
 			int bpp = image.getColorModel().getPixelSize();
 			int bytespp = bpp / 8;
 			int bytespl = (int) Math.ceil(image.getWidth() * bpp / 8.0);
@@ -46,35 +64,38 @@ public class TextRecognizer {
 			TessAPI1.TessResultIterator ri = TessAPI1.TessBaseAPIGetIterator(handle);
 			TessAPI1.TessPageIterator pi = TessAPI1.TessResultIteratorGetPageIterator(ri);
 			TessAPI1.TessPageIteratorBegin(pi);
-			System.out.println("Bounding boxes:\nchar(s) left top right bottom confidence font-attributes");
-			int level = TessPageIteratorLevel.RIL_TEXTLINE;
+			int level = TessPageIteratorLevel.RIL_WORD;
+			if (text.split(" ").length > 1) {
+				level = TessPageIteratorLevel.RIL_TEXTLINE;
+			}
 			do {
 				Pointer ptr = TessAPI1.TessResultIteratorGetUTF8Text(ri, level);
-				String word = ptr.getString(0);
+				String foundText = ptr.getString(0);
 				TessAPI1.TessDeleteText(ptr);
-				float confidence = TessAPI1.TessResultIteratorConfidence(ri, level);
-				IntBuffer leftB = IntBuffer.allocate(1);
-				IntBuffer topB = IntBuffer.allocate(1);
-				IntBuffer rightB = IntBuffer.allocate(1);
-				IntBuffer bottomB = IntBuffer.allocate(1);
-				TessAPI1.TessPageIteratorBoundingBox(pi, level, leftB, topB, rightB, bottomB);
-				int left = leftB.get();
-				int top = topB.get();
-				int right = rightB.get();
-				int bottom = bottomB.get();
-				System.out.println(ptr.getString(0));
-				if (ptr.getWideString(0).contains(text)) {
-					System.out.println(String.format("%s %d %d %d %d %f", word, left, top, right, bottom, confidence));
-					// System.out.println(String.format("%s %d %d %d %d", str, left,
-					// height - bottom, right, height - top)); //
-					// training box coordinates
+				if (foundText.contains(text)) {
+					IntBuffer leftB = IntBuffer.allocate(1);
+					IntBuffer topB = IntBuffer.allocate(1);
+					IntBuffer rightB = IntBuffer.allocate(1);
+					IntBuffer bottomB = IntBuffer.allocate(1);
+					TessAPI1.TessPageIteratorBoundingBox(pi, level, leftB, topB, rightB, bottomB);
+					int left = leftB.get();
+					int top = topB.get();
+					int right = rightB.get();
+					int bottom = bottomB.get();
+					coordinates.add(new Location((right-left)/2, (top-bottom)/2));
 				}
 			} while (TessAPI1.TessPageIteratorNext(pi, level) == TRUE);
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} // require jai-imageio lib to read TIFF
+		return coordinates;
+	}
+	
+	private BufferedImage enlargeImageForOCR(BufferedImage image) {
+		int targetHeight = image.getHeight()*3;
+		int targetWidth = image.getWidth()*3;
+		return Scalr.resize(image, targetWidth, targetHeight);
 	}
 
 }

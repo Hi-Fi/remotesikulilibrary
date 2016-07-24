@@ -29,7 +29,7 @@ public class TextRecognizerTest {
 	@Test
 	public void testTextFinding() {
 		TextRecognizer tr = new TextRecognizer();
-		tr.findTextFromImage("File", "src/test/resources/testImages/focus_test_app.png");
+		tr.findTextFromImage("Focus test app", "src/test/resources/testImages/focus_test_app.png");
 	}
 
 }
