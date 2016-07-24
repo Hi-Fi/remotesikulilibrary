@@ -27,6 +27,9 @@ import net.sourceforge.tess4j.util.LoadLibs;
 
 public class TextRecognizer {
 
+	// multiplier used to enlarge image and to calculate correct coordinates
+	int multiplier = 3;
+	
 	public Location findText(String text) {
 		Server server = new Server();
 		String imageLocation = server.captureScreenshot(new String[]{});
@@ -67,6 +70,8 @@ public class TextRecognizer {
 			int level = TessPageIteratorLevel.RIL_WORD;
 			if (text.split(" ").length > 1) {
 				level = TessPageIteratorLevel.RIL_TEXTLINE;
+			} else if (text.length() == 1) {
+				level = TessPageIteratorLevel.RIL_SYMBOL;
 			}
 			do {
 				Pointer ptr = TessAPI1.TessResultIteratorGetUTF8Text(ri, level);
@@ -78,11 +83,12 @@ public class TextRecognizer {
 					IntBuffer rightB = IntBuffer.allocate(1);
 					IntBuffer bottomB = IntBuffer.allocate(1);
 					TessAPI1.TessPageIteratorBoundingBox(pi, level, leftB, topB, rightB, bottomB);
-					int left = leftB.get();
-					int top = topB.get();
-					int right = rightB.get();
-					int bottom = bottomB.get();
-					coordinates.add(new Location((right-left)/2, (top-bottom)/2));
+					int left = leftB.get()/multiplier;
+					int top = topB.get()/multiplier;
+					int right = rightB.get()/multiplier;
+					int bottom = bottomB.get()/multiplier;
+					SikuliLogger.logDebug(String.format("Location of %s is left: %d top:%d right:%d bottom:%d", foundText, left, top, right, bottom));
+					coordinates.add(new Location(left+(right-left)/2, top+(bottom-top)/2));
 				}
 			} while (TessAPI1.TessPageIteratorNext(pi, level) == TRUE);
 		} catch (IOException e) {
@@ -93,8 +99,8 @@ public class TextRecognizer {
 	}
 	
 	private BufferedImage enlargeImageForOCR(BufferedImage image) {
-		int targetHeight = image.getHeight()*3;
-		int targetWidth = image.getWidth()*3;
+		int targetHeight = image.getHeight()*multiplier;
+		int targetWidth = image.getWidth()*multiplier;
 		return Scalr.resize(image, targetWidth, targetHeight);
 	}
 
