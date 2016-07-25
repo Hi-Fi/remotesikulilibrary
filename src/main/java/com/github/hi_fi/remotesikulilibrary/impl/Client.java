@@ -21,7 +21,7 @@ import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 public class Client implements RemoteSikuliLibraryInterface {
 	
 	public void updateRegionToFocusedApp() {
-		this.executeRemoteCall("updateRegionToFocusedApp");
+		this.executeRemoteCall("useFocusedAppAsRegion");
 	}
 	
 	public void resetRegionToFullScreen() {
