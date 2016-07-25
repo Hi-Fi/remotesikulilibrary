@@ -8,6 +8,7 @@ import org.apache.ws.commons.util.Base64;
 import org.sikuli.script.App;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Key;
+import org.sikuli.script.Location;
 import org.sikuli.script.Pattern;
 
 import com.github.hi_fi.remotesikulilibrary.DTO.Locator;
@@ -68,7 +69,9 @@ public class Server implements RemoteSikuliLibraryInterface {
 				Helper.getRegion().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
 						.targetOffset(locator.getxOffset(), locator.getyOffset()));
 			} else if (locator.isText()) {
-				Helper.getRegion().click(new TextRecognizer().findText(imageNameOrText));
+				Location location = new TextRecognizer().findText(imageNameOrText);
+				Helper.getRegion().click(new Location(location.x + (double)locator.getxOffset(), 
+										              location.y + (double)locator.getyOffset()));
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -84,7 +87,9 @@ public class Server implements RemoteSikuliLibraryInterface {
 				Helper.getRegion().doubleClick(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
 						.targetOffset(locator.getxOffset(), locator.getyOffset()));
 			} else if (locator.isText()) {
-				Helper.getRegion().doubleClick(new TextRecognizer().findText(imageNameOrText));
+				Location location = new TextRecognizer().findText(imageNameOrText);
+				Helper.getRegion().doubleClick(new Location(location.x + (double)locator.getxOffset(), 
+													        location.y + (double)locator.getyOffset()));
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -100,7 +105,9 @@ public class Server implements RemoteSikuliLibraryInterface {
 				Helper.getRegion().rightClick(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
 						.targetOffset(locator.getxOffset(), locator.getyOffset()));
 			} else if (locator.isText()) {
-				Helper.getRegion().rightClick(new TextRecognizer().findText(imageNameOrText));
+				Location location = new TextRecognizer().findText(imageNameOrText);
+				Helper.getRegion().rightClick(new Location(location.x + (double)locator.getxOffset(), 
+													       location.y + (double)locator.getyOffset()));
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -147,7 +154,9 @@ public class Server implements RemoteSikuliLibraryInterface {
 					Helper.getRegion().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
 							.targetOffset(locator.getxOffset(), locator.getyOffset()));
 				} else if (locator.isText()) {
-					Helper.getRegion().click(new TextRecognizer().findText(imageNameOrText));
+					Location location = new TextRecognizer().findText(imageNameOrText);
+					Helper.getRegion().click(new Location(location.x + (double)locator.getxOffset(), 
+														  location.y + (double)locator.getyOffset()));
 				}
 			} catch (FindFailed e) {
 				this.handleFindFailed(locator.isRemote(), e);

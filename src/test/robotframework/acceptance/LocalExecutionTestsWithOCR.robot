@@ -11,6 +11,11 @@ Test image clicks locally
     Click Item    OK   ok_clicked.png
     Double Click Item    Cancel    cancel_double_clicked.png
     Right Click Item    Submit    submit_right_clicked.png
+    
+Local input of text 
+	Wait Until Screen Contains    buttons.png
+	Input Text    Test text    Test field    0.7    50    0
+	Wait Until Screen Contains    filled_text_field.png
 
 ****Keyword****  
 Setup OCR suite
