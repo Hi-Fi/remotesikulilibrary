@@ -68,7 +68,7 @@ public class TextRecognizerTest {
 		TextRecognizer tr = new TextRecognizer();
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
-			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureScreenshot((String[]) Mockito.any());
+			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -85,7 +85,7 @@ public class TextRecognizerTest {
 		TextRecognizer tr = new TextRecognizer();
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
-			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureScreenshot((String[]) Mockito.any());
+			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -101,7 +101,7 @@ public class TextRecognizerTest {
 		TextRecognizer tr = new TextRecognizer();
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
-			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureScreenshot((String[]) Mockito.any());
+			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();

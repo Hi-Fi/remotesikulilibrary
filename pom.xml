@@ -248,7 +248,6 @@
 							<goal>acceptance-test</goal>
 						</goals>
 						<configuration>
-							<logLevel>DEBUG</logLevel>
 							<extraPathDirectories>
 								<extraPathDirectory>target/remotesikulilibrary-${project.version}.jar</extraPathDirectory>
 							</extraPathDirectories>

@@ -28,5 +28,9 @@ public interface RemoteSikuliLibraryInterface {
 	
 	public void switchApp(String appCommand);
 	
+	public void updateRegionToFocusedApp();
+	
+	public void resetRegionToFullScreen();
+	
 
 }

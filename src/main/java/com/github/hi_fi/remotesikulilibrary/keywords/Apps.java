@@ -28,4 +28,14 @@ public class Apps {
 	public void switchApp(String appIdentifier) {
 		Helper.getLibrary().switchApp(appIdentifier);
 	}	
+	
+	@RobotKeyword("Assign only focused app as target of actions.")
+	public void useFocusedAppAsRegion() {
+		Helper.getLibrary().updateRegionToFocusedApp();
+	}
+	
+	@RobotKeyword("Reset actions to target to whole screen.")
+	public void resetRegionToFullScreen() {
+		Helper.getLibrary().resetRegionToFullScreen();
+	}
 }

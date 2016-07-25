@@ -10,6 +10,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.sikuli.script.Region;
+import org.sikuli.script.Screen;
 
 import com.github.hi_fi.remotesikulilibrary.impl.Client;
 import com.github.hi_fi.remotesikulilibrary.impl.RemoteSikuliLibraryInterface;
@@ -24,7 +26,24 @@ public class Helper {
 	private static String imageDirectory = "testdata/images";
 	private static String screenshotDirectory = "images";
 	private static double waitTimeout = 10.0;
+	private static Region appRegion;
 	
+	public static Region getRegion() {
+		if (appRegion == null) {
+			appRegion = new Screen();
+		}
+		return appRegion;
+	}
+	
+	public static Region setRegion(Region newRegion) {
+		appRegion = newRegion;
+		return appRegion;
+	}
+	
+	public static Region resetRegion() {
+		appRegion = new Screen();
+		return appRegion;
+	}
 	
 	public static XmlRpcClient getRemoteClient() {
 		return remoteClient;

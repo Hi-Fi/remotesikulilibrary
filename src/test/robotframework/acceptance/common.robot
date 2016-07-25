@@ -15,6 +15,8 @@ Start test server
 Start test application
     ${process}    Start Process    java    -cp    ${maven.test.classpath}    com.github.hi_fi.testapp.TestSwingApp
 	Set Test Variable    ${testApp}    ${process}
+	Sleep    5s
+	Use Focused App As Region
 	
 Click images
     [Arguments]    ${Keyword to test}    ${button to click}    ${expected outcome}

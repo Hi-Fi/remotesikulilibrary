@@ -32,7 +32,7 @@ public class TextRecognizer {
 	
 	public Location findText(String text) {
 		Server server = new Server();
-		String imageLocation = server.captureScreenshot(new String[]{});
+		String imageLocation = server.captureRegion(new String[]{});
 		List<Location> coordinates = this.findTextFromImage(text, imageLocation);
 		if (coordinates.size() == 0) {
 			throw new RuntimeException("Text "+text+" not found from page");
