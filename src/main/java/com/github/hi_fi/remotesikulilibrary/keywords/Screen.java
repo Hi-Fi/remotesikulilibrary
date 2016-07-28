@@ -6,7 +6,6 @@ import org.robotframework.javalib.annotation.RobotKeywords;
 
 import com.github.hi_fi.remotesikulilibrary.DTO.Locator;
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
-import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
 @RobotKeywords
 public class Screen {

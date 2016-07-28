@@ -34,15 +34,10 @@ public class Server implements RemoteSikuliLibraryInterface {
 		Helper.resetRegion();
 	}
 	
-	public String captureRegion(String[] remote) {
+	public String captureRegionImage() {
 		SikuliLogger.logDebug("Calling region capture from server class");
 		byte[] imageData = this.captureRegion();
-		if (remote.length > 0) {
-			SikuliLogger.logDebug("Returning base64 data of image");
-			return Base64.encode(imageData);
-		} else {
-			return Helper.writeImageByteArrayToDisk(imageData);
-		}
+		return Helper.writeImageByteArrayToDisk(imageData, false);
 	}
 	
 	public String captureScreenshot(String[] remote) {
@@ -122,7 +117,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 			if (locator.isImage()) {
 				Helper.getRegion().wait(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
 			} else if (locator.isText()) {
-				Helper.getRegion().wait(imageNameOrText);
+				new TextRecognizer().waitUntilTextIsVisible(imageNameOrText);
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -136,7 +131,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 		if (locator.isImage()) {
 			vanished = Helper.getRegion().waitVanish(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
 		} else if (locator.isText()) {
-			vanished = Helper.getRegion().waitVanish(imageNameOrText);
+			vanished = new TextRecognizer().waitUntilTextIsNotVisible(imageNameOrText);
 		}
 		
 		if (!vanished) {

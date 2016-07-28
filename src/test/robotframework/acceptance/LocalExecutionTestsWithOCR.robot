@@ -17,6 +17,18 @@ Local input of text
 	Input Text    Test text    Test field    0.7    50    0
 	Wait Until Screen Contains    filled_text_field.png
 
+Wait for text to appear
+    ${pid}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "Test app for OCR"
+    Wait Until Screen Contains    Test app for OCR
+    Close App    ${pid}
+    
+Wait for text to disappear
+    ${pid}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "Test app for OCR"
+    Wait Until Screen Contains    Test app for OCR
+    Close App    ${pid}
+    Reset Region To Full Screen
+    Wait Until Screen Does Not Contain    Test app for OCR
+
 ****Keyword****  
 Setup OCR suite
     Set Test Image Directory    .${/}src${/}test${/}resources${/}testImages

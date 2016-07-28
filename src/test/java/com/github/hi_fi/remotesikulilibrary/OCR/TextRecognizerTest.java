@@ -10,11 +10,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import static org.powermock.api.mockito.PowerMockito.*;
 
+import org.sikuli.script.FindFailed;
 import org.sikuli.script.Location;
 
 import com.github.hi_fi.remotesikulilibrary.impl.Server;
@@ -56,7 +56,6 @@ public class TextRecognizerTest {
 	
 	@Test
 	public void testSingleLetterFoundMultipleTimes() {
-		Helper.enableDebug();
 		TextRecognizer tr = new TextRecognizer();
 		List<Location> results = tr.findTextFromImage("o", "src/test/resources/testImages/focus_test_app.png");
 		assertEquals(5, results.size());
@@ -65,27 +64,29 @@ public class TextRecognizerTest {
 	@Test
 	public void testNormalTextSearchWithOneResult() {
 		Server mockServer = mock(Server.class);
-		TextRecognizer tr = new TextRecognizer();
+		Location location = new Location(0,0);
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
-			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
+			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegionImage();
+			TextRecognizer tr = new TextRecognizer();
+			location = tr.findText("Focus test app");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-		Location location = tr.findText("Focus test app");
+		
 		assertEquals(location.x, 189);
 		assertEquals(location.y, 35);
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void testNormalTextSearchWithNoResults() {
-		Helper.enableDebug();
 		Server mockServer = mock(Server.class);
 		TextRecognizer tr = new TextRecognizer();
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
-			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
+			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegionImage();
+			tr = new TextRecognizer();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -96,12 +97,12 @@ public class TextRecognizerTest {
 	
 	@Test
 	public void testNormalTextSearchWithMoreThanOneResults() {
-		Helper.enableDebug();
 		Server mockServer = mock(Server.class);
 		TextRecognizer tr = new TextRecognizer();
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
-			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
+			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegionImage();
+			tr = new TextRecognizer();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -110,5 +111,36 @@ public class TextRecognizerTest {
 		assertEquals(178, location.x);
 		assertEquals(35, location.y);
 	}
-
+	
+	@Test(expected = FindFailed.class)
+	public void testNormalTextWaitWithNoResults() throws FindFailed {
+		Server mockServer = mock(Server.class);
+		TextRecognizer tr = new TextRecognizer();
+		try {
+			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
+			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegionImage();
+			tr = new TextRecognizer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+			
+		}
+		Helper.setWaitTimeout(0);
+		tr.waitUntilTextIsVisible("Not foundable text");
+	}
+	
+	public void testNormalTextWaitVanishing() throws FindFailed {
+		Server mockServer = mock(Server.class);
+		TextRecognizer tr = new TextRecognizer();
+		try {
+			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
+			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegionImage();
+			tr = new TextRecognizer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+			
+		}
+		tr.waitUntilTextIsNotVisible("Not foundable text");
+	}
 }

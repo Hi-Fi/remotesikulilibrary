@@ -114,10 +114,14 @@ public class Helper {
 	}
 	
 	public static String writeImageByteArrayToDisk(byte[] imageData) {
+		return writeImageByteArrayToDisk(imageData, true);
+	}
+	
+	public static String writeImageByteArrayToDisk(byte[] imageData, boolean logImage) {
 		String screenshotPath = screenshotDirectory+"/"+UUID.randomUUID()+".png";
 		try {
 			FileUtils.writeByteArrayToFile(new File(screenshotPath), imageData);
-			SikuliLogger.logImage(screenshotPath);
+			if (logImage) { SikuliLogger.logImage(screenshotPath); }
 		} catch (IOException e) {
 			SikuliLogger.logDebug(e.getStackTrace());
 			throw new RuntimeException(e.getMessage());
