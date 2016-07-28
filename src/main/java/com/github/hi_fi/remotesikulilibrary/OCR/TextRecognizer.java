@@ -41,8 +41,8 @@ public class TextRecognizer {
 		List<Location> coordinates;
 		long startTime = System.currentTimeMillis();
 		do {
-			coordinates = this.findTextFromImage(text, server.captureRegion(new String[]{}));
-		} while (coordinates.size() == 0 && Helper.getWaitTimeout() >= ((startTime-System.currentTimeMillis())/1000));
+			coordinates = this.findTextFromImage(text, server.captureRegionImage());
+		} while (coordinates.size() == 0 && Helper.getWaitTimeout() >= ((System.currentTimeMillis()-startTime)/1000));
 		
 		if (coordinates.size() == 0) {
 			throw new FindFailed("Text "+text+" didn't appear to screen/region");
@@ -53,14 +53,14 @@ public class TextRecognizer {
 		List<Location> coordinates;
 		long startTime = System.currentTimeMillis();
 		do {
-			coordinates = this.findTextFromImage(text, server.captureRegion(new String[]{}));
-		} while (coordinates.size() > 0 && Helper.getWaitTimeout() >= ((startTime-System.currentTimeMillis())/1000));
+			coordinates = this.findTextFromImage(text, server.captureRegionImage());
+		} while (coordinates.size() > 0 && Helper.getWaitTimeout() >= ((System.currentTimeMillis()-startTime)/1000));
 		
 		return coordinates.size()==0;
 	}
 	
 	public Location findText(String text) {
-		String imageLocation = server.captureRegion(new String[]{});
+		String imageLocation = server.captureRegionImage();
 		List<Location> coordinates = this.findTextFromImage(text, imageLocation);
 		if (coordinates.size() == 0) {
 			throw new RuntimeException("Text "+text+" not found from page");

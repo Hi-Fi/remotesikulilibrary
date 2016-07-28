@@ -34,15 +34,10 @@ public class Server implements RemoteSikuliLibraryInterface {
 		Helper.resetRegion();
 	}
 	
-	public String captureRegion(String[] remote) {
+	public String captureRegionImage() {
 		SikuliLogger.logDebug("Calling region capture from server class");
 		byte[] imageData = this.captureRegion();
-		if (remote.length > 0) {
-			SikuliLogger.logDebug("Returning base64 data of image");
-			return Base64.encode(imageData);
-		} else {
-			return Helper.writeImageByteArrayToDisk(imageData);
-		}
+		return Helper.writeImageByteArrayToDisk(imageData, false);
 	}
 	
 	public String captureScreenshot(String[] remote) {
