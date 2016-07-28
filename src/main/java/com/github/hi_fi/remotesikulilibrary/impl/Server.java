@@ -8,10 +8,11 @@ import org.apache.ws.commons.util.Base64;
 import org.sikuli.script.App;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Key;
+import org.sikuli.script.Location;
 import org.sikuli.script.Pattern;
-import org.sikuli.script.Screen;
 
 import com.github.hi_fi.remotesikulilibrary.DTO.Locator;
+import com.github.hi_fi.remotesikulilibrary.OCR.TextRecognizer;
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
 import com.github.hi_fi.remotesikulilibrary.utils.KeyMapper;
 import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
@@ -23,7 +24,27 @@ import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
  *
  */
 public class Server implements RemoteSikuliLibraryInterface {
-
+	
+	public void updateRegionToFocusedApp() {
+		Helper.setRegion(App.focusedWindow());
+		SikuliLogger.log(Helper.getRegion());
+	}
+	
+	public void resetRegionToFullScreen() {
+		Helper.resetRegion();
+	}
+	
+	public String captureRegion(String[] remote) {
+		SikuliLogger.logDebug("Calling region capture from server class");
+		byte[] imageData = this.captureRegion();
+		if (remote.length > 0) {
+			SikuliLogger.logDebug("Returning base64 data of image");
+			return Base64.encode(imageData);
+		} else {
+			return Helper.writeImageByteArrayToDisk(imageData);
+		}
+	}
+	
 	public String captureScreenshot(String[] remote) {
 		SikuliLogger.logDebug("Calling screenshot capture from server class");
 		byte[] imageData = this.captureScreenshot();
@@ -45,10 +66,12 @@ public class Server implements RemoteSikuliLibraryInterface {
 		try {
 			SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
 			if (locator.isImage()) {
-				new Screen().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
+				Helper.getRegion().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
 						.targetOffset(locator.getxOffset(), locator.getyOffset()));
 			} else if (locator.isText()) {
-				new Screen().click(imageNameOrText);
+				Location location = new TextRecognizer().findText(imageNameOrText);
+				Helper.getRegion().click(new Location(location.x + (double)locator.getxOffset(), 
+										              location.y + (double)locator.getyOffset()));
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -61,10 +84,12 @@ public class Server implements RemoteSikuliLibraryInterface {
 		try {
 			SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
 			if (locator.isImage()) {
-				new Screen().doubleClick(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
+				Helper.getRegion().doubleClick(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
 						.targetOffset(locator.getxOffset(), locator.getyOffset()));
 			} else if (locator.isText()) {
-				new Screen().doubleClick(imageNameOrText);
+				Location location = new TextRecognizer().findText(imageNameOrText);
+				Helper.getRegion().doubleClick(new Location(location.x + (double)locator.getxOffset(), 
+													        location.y + (double)locator.getyOffset()));
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -77,10 +102,12 @@ public class Server implements RemoteSikuliLibraryInterface {
 		try {
 			SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
 			if (locator.isImage()) {
-				new Screen().rightClick(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
+				Helper.getRegion().rightClick(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
 						.targetOffset(locator.getxOffset(), locator.getyOffset()));
 			} else if (locator.isText()) {
-				new Screen().rightClick(imageNameOrText);
+				Location location = new TextRecognizer().findText(imageNameOrText);
+				Helper.getRegion().rightClick(new Location(location.x + (double)locator.getxOffset(), 
+													       location.y + (double)locator.getyOffset()));
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -91,12 +118,11 @@ public class Server implements RemoteSikuliLibraryInterface {
 		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
 		try {
 			SikuliLogger.logDebug("Waiting for item: " + imageNameOrText);
-			Screen screen = new Screen();
-			screen.setAutoWaitTimeout(Helper.getWaitTimeout());
+			Helper.getRegion().setAutoWaitTimeout(Helper.getWaitTimeout());
 			if (locator.isImage()) {
-				screen.wait(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
+				Helper.getRegion().wait(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
 			} else if (locator.isText()) {
-				screen.wait(imageNameOrText);
+				Helper.getRegion().wait(imageNameOrText);
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -106,12 +132,11 @@ public class Server implements RemoteSikuliLibraryInterface {
 	public void waitUntilScreenDoesNotContain(String imageNameOrText, Locator locator) {
 		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
 		boolean vanished = true;
-		Screen screen = new Screen();
-		screen.setAutoWaitTimeout(Helper.getWaitTimeout());
+		Helper.getRegion().setAutoWaitTimeout(Helper.getWaitTimeout());
 		if (locator.isImage()) {
-			vanished = screen.waitVanish(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
+			vanished = Helper.getRegion().waitVanish(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
 		} else if (locator.isText()) {
-			vanished = screen.waitVanish(imageNameOrText);
+			vanished = Helper.getRegion().waitVanish(imageNameOrText);
 		}
 		
 		if (!vanished) {
@@ -126,33 +151,34 @@ public class Server implements RemoteSikuliLibraryInterface {
 			try {
 				SikuliLogger.logDebug("Clicking item: " + imageNameOrText);
 				if (locator.isImage()) {
-					new Screen().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
+					Helper.getRegion().click(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat())
 							.targetOffset(locator.getxOffset(), locator.getyOffset()));
 				} else if (locator.isText()) {
-					new Screen().click(imageNameOrText);
+					Location location = new TextRecognizer().findText(imageNameOrText);
+					Helper.getRegion().click(new Location(location.x + (double)locator.getxOffset(), 
+														  location.y + (double)locator.getyOffset()));
 				}
 			} catch (FindFailed e) {
 				this.handleFindFailed(locator.isRemote(), e);
 			}
 		}
 
-		new Screen().paste(text);
+		Helper.getRegion().paste(text);
 	}
 
 	public void typeKeys(String keys, String... modifiers) {
 		boolean numLockActive = Key.isLockOn(Key.C_NUM_LOCK);
-		Screen screen = new Screen();
 		if (numLockActive) {
-			screen.type(Key.NUM_LOCK);
+			Helper.getRegion().type(Key.NUM_LOCK);
 		}
 		String modifierText = "";
 		for (Object modifier : modifiers) {
 			modifierText = KeyMapper.getKey(modifier.toString());
 		}
 		keys = KeyMapper.getKey(keys);
-		new Screen().type(keys, modifierText);
+		Helper.getRegion().type(keys, modifierText);
 		if (numLockActive) {
-			screen.type(Key.NUM_LOCK);
+			Helper.getRegion().type(Key.NUM_LOCK);
 		}
 	}
 	
@@ -180,9 +206,20 @@ public class Server implements RemoteSikuliLibraryInterface {
 			App.focus(appCommand);
 		}
 	}
+	
+	private byte[] captureRegion() {
+		String temporaryScreenshotPath = Helper.getRegion().saveScreenCapture();
+		SikuliLogger.logDebug("Temporary image stored to: " + temporaryScreenshotPath);
+		try {
+			return FileUtils.readFileToByteArray(new File(temporaryScreenshotPath));
+		} catch (IOException e) {
+			SikuliLogger.logDebug(e.getStackTrace());
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 
 	private byte[] captureScreenshot() {
-		String temporaryScreenshotPath = new Screen().capture().getFile();
+		String temporaryScreenshotPath = Helper.getRegion().getScreen().capture().getFile();
 		SikuliLogger.logDebug("Temporary image stored to: " + temporaryScreenshotPath);
 		try {
 			return FileUtils.readFileToByteArray(new File(temporaryScreenshotPath));

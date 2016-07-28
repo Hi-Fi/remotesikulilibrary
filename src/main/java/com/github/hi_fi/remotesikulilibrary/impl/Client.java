@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.DecodingException;
 import org.apache.xmlrpc.XmlRpcException;
+import org.sikuli.script.App;
 
 import com.github.hi_fi.remotesikulilibrary.DTO.Locator;
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
@@ -18,6 +19,14 @@ import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
  *
  */
 public class Client implements RemoteSikuliLibraryInterface {
+	
+	public void updateRegionToFocusedApp() {
+		this.executeRemoteCall("useFocusedAppAsRegion");
+	}
+	
+	public void resetRegionToFullScreen() {
+		this.executeRemoteCall("resetRegionToFullScreen");
+	}
 
 	public String captureScreenshot(String[] remote) {
 		try {

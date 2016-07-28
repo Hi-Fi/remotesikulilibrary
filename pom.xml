@@ -92,6 +92,16 @@
 			<version>1.2.1</version>
 		</dependency>
 		<dependency>
+			<groupId>net.sourceforge.tess4j</groupId>
+			<artifactId>tess4j</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.imgscalr</groupId>
+			<artifactId>imgscalr-lib</artifactId>
+			<version>4.2</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
@@ -238,7 +248,6 @@
 							<goal>acceptance-test</goal>
 						</goals>
 						<configuration>
-							<logLevel>DEBUG</logLevel>
 							<extraPathDirectories>
 								<extraPathDirectory>target/remotesikulilibrary-${project.version}.jar</extraPathDirectory>
 							</extraPathDirectories>
