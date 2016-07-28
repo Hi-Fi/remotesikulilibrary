@@ -65,15 +65,17 @@ public class TextRecognizerTest {
 	@Test
 	public void testNormalTextSearchWithOneResult() {
 		Server mockServer = mock(Server.class);
-		TextRecognizer tr = new TextRecognizer();
+		Location location = new Location(0,0);
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
 			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
+			TextRecognizer tr = new TextRecognizer();
+			location = tr.findText("Focus test app");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-		Location location = tr.findText("Focus test app");
+		
 		assertEquals(location.x, 189);
 		assertEquals(location.y, 35);
 	}
@@ -86,6 +88,7 @@ public class TextRecognizerTest {
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
 			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
+			tr = new TextRecognizer();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -102,6 +105,7 @@ public class TextRecognizerTest {
 		try {
 			whenNew(Server.class).withNoArguments().thenReturn(mockServer);
 			doReturn("src/test/resources/testImages/focus_test_app.png").when(mockServer).captureRegion((String[]) Mockito.any());
+			tr = new TextRecognizer();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();

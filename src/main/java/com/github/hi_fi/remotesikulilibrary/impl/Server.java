@@ -122,7 +122,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 			if (locator.isImage()) {
 				Helper.getRegion().wait(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
 			} else if (locator.isText()) {
-				Helper.getRegion().wait(imageNameOrText);
+				new TextRecognizer().waitUntilTextIsVisible(imageNameOrText);
 			}
 		} catch (FindFailed e) {
 			this.handleFindFailed(locator.isRemote(), e);
@@ -136,7 +136,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 		if (locator.isImage()) {
 			vanished = Helper.getRegion().waitVanish(new Pattern(imageNameOrText).similar(locator.getSimilarityasFloat()));
 		} else if (locator.isText()) {
-			vanished = Helper.getRegion().waitVanish(imageNameOrText);
+			vanished = new TextRecognizer().waitUntilTextIsNotVisible(imageNameOrText);
 		}
 		
 		if (!vanished) {

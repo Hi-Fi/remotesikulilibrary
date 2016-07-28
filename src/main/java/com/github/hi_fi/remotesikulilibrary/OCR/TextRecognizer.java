@@ -13,10 +13,12 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.imgscalr.Scalr;
+import org.sikuli.script.FindFailed;
 import org.sikuli.script.Image;
 import org.sikuli.script.Location;
 
 import com.github.hi_fi.remotesikulilibrary.impl.Server;
+import com.github.hi_fi.remotesikulilibrary.utils.Helper;
 import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 import com.sun.jna.Pointer;
 
@@ -27,11 +29,37 @@ import net.sourceforge.tess4j.util.LoadLibs;
 
 public class TextRecognizer {
 
+	Server server;
+	
+	public TextRecognizer() {
+		this.server = new Server();
+	}
 	// multiplier used to enlarge image and to calculate correct coordinates
 	int multiplier = 3;
 	
+	public void waitUntilTextIsVisible(String text) throws FindFailed {
+		List<Location> coordinates;
+		long startTime = System.currentTimeMillis();
+		do {
+			coordinates = this.findTextFromImage(text, server.captureRegion(new String[]{}));
+		} while (coordinates.size() == 0 && Helper.getWaitTimeout() >= ((startTime-System.currentTimeMillis())/1000));
+		
+		if (coordinates.size() == 0) {
+			throw new FindFailed("Text "+text+" didn't appear to screen/region");
+		}		 
+	}
+	
+	public boolean waitUntilTextIsNotVisible(String text) {
+		List<Location> coordinates;
+		long startTime = System.currentTimeMillis();
+		do {
+			coordinates = this.findTextFromImage(text, server.captureRegion(new String[]{}));
+		} while (coordinates.size() > 0 && Helper.getWaitTimeout() >= ((startTime-System.currentTimeMillis())/1000));
+		
+		return coordinates.size()==0;
+	}
+	
 	public Location findText(String text) {
-		Server server = new Server();
 		String imageLocation = server.captureRegion(new String[]{});
 		List<Location> coordinates = this.findTextFromImage(text, imageLocation);
 		if (coordinates.size() == 0) {
