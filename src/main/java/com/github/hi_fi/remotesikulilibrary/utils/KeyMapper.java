@@ -21,6 +21,13 @@ public class KeyMapper {
 		keys.put("TAB", Key.TAB);
 		keys.put("SHIFT", Key.SHIFT);
 		keys.put("HOME", Key.HOME);
+		keys.put("WIN", Key.WIN);
+		keys.put("META", Key.META);
+		keys.put("CMD", Key.CMD);
+		keys.put("ALTGR", Key.ALTGR);
+		keys.put("INSERT", Key.INSERT);
+		keys.put("DELETE", Key.DELETE);
+		keys.put("BACKSPACE", Key.BACKSPACE);
 		keyMap = Collections.unmodifiableMap(keys);
 	}
 	
