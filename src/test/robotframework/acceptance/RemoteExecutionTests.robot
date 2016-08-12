@@ -34,9 +34,21 @@ Test image clicks remotely
     Right Click Item    submit_button.png    submit_right_clicked.png
     
 Remote typing of special keys 
+    [Setup]    NONE
 	[Template]    Remote typing of special keys
 	a    CTRL
 	HOME    SHIFT
+
+Remote input and copy text to clipboard
+    ${fill text}    Set Variable    Test text
+	Wait Until Screen Contains    buttons.png
+	Input Text    ${fill text}    empty_text_field.png	
+	Wait Until Screen Contains    filled_text_field.png
+	Input Text    ${fill text}    filled_text_field.png	
+	Type Keys    a    CTRL
+	Type Keys    c    CTRL
+	${text}    Get Clipboard Content
+	Should Be Equal    ${text}    ${fill text}${fill text}
 
 Remote controlling of application
     ${pid}    Open App    java -cp ${maven.test.classpath} com.github.hi_fi.testapp.TestSwingApp "First app"
@@ -62,9 +74,9 @@ Prepare test environment for remote tests
 Remote typing of special keys    
     [Arguments]    ${keys}    @{modifiers}
     [Teardown]    Log results and kill process
-    Start test application
+    Prepare test environment for remote tests
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png
 	Wait Until Screen Contains    filled_text_field.png
 	Type Keys    ${keys}    @{modifiers}
-	Wait Until Screen Contains    filled_and_selected_text_field.png    0.9
+	Wait Until Screen Contains    filled_and_selected_text_field.png    0.97

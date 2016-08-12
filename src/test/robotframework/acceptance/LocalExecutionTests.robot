@@ -33,6 +33,17 @@ Local typing of special keys
 	a    CTRL
 	HOME    SHIFT
 
+Local input and copy text to clipboard 
+    ${fill text}    Set Variable    Test text
+	Wait Until Screen Contains    buttons.png
+	Input Text    ${fill text}    empty_text_field.png	
+	Wait Until Screen Contains    filled_text_field.png
+	Input Text    ${fill text}    filled_text_field.png	
+	Type Keys    a    CTRL
+	Type Keys    c    CTRL
+	${text}    Get Clipboard Content
+	Should Be Equal    ${text}    ${fill text}${fill text}
+
 Local input and replace of text 
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png

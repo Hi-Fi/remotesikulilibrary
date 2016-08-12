@@ -81,8 +81,8 @@ public class Client implements RemoteSikuliLibraryInterface {
 		this.executeRemoteCall("inputText", text, imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
 	}
 
-	public void typeKeys(String keys, String...modifiers) {
-		this.executeRemoteCall("typeKeys", keys, modifiers);
+	public void typeKeys(String keys, Object...modifiers) {
+		this.executeRemoteCall("typeKeys", prepend(modifiers, keys));
 	}
 	
 	public int startApp(String appCommand) {
@@ -100,10 +100,19 @@ public class Client implements RemoteSikuliLibraryInterface {
 		
 	}
 	
+	public String getClipboardContent() {
+		return this.executeRemoteCall("getClipboardContent");
+	}
+	
 	@SuppressWarnings("rawtypes")
 	private String executeRemoteCall(String keyword, Object... params) {
 		Map response = new HashMap();
-		SikuliLogger.logDebug("Calling remotely keyword: " + keyword + " with " + params.length + " parameters");
+		SikuliLogger.logDebug("Calling remotely keyword: " + keyword + " with " + params.length + " parameters.");
+		SikuliLogger.logDebug("Logging all parameter");
+		for (Object param: params) {
+			SikuliLogger.logDebug(param);
+		}
+		
 		try {
 			response = (Map) Helper.getRemoteClient().execute("run_keyword", new Object[] { keyword, params });
 			SikuliLogger.logDebug("Response from remote call: " + response);
@@ -135,5 +144,19 @@ public class Client implements RemoteSikuliLibraryInterface {
 		} else {
 			return "No return value";
 		}
+	}
+	
+	static <T> T[] append(T[] arr, T lastElement) {
+	    final int N = arr.length;
+	    arr = java.util.Arrays.copyOf(arr, N+1);
+	    arr[N] = lastElement;
+	    return arr;
+	}
+	static <T> T[] prepend(T[] arr, T firstElement) {
+	    final int N = arr.length;
+	    arr = java.util.Arrays.copyOf(arr, N+1);
+	    System.arraycopy(arr, 0, arr, 1, N);
+	    arr[0] = firstElement;
+	    return arr;
 	}
 }

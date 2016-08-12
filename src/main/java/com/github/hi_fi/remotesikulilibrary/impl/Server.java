@@ -1,5 +1,7 @@
 package com.github.hi_fi.remotesikulilibrary.impl;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
 import java.io.File;
 import java.io.IOException;
 
@@ -161,7 +163,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 		Helper.getRegion().paste(text);
 	}
 
-	public void typeKeys(String keys, String... modifiers) {
+	public void typeKeys(String keys, Object... modifiers) {
 		boolean numLockActive = Key.isLockOn(Key.C_NUM_LOCK);
 		if (numLockActive) {
 			Helper.getRegion().type(Key.NUM_LOCK);
@@ -169,6 +171,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 		String modifierText = "";
 		for (Object modifier : modifiers) {
 			modifierText = KeyMapper.getKey(modifier.toString());
+			SikuliLogger.logDebug(modifier+" => "+modifierText);
 		}
 		keys = KeyMapper.getKey(keys);
 		Helper.getRegion().type(keys, modifierText);
@@ -199,6 +202,14 @@ public class Server implements RemoteSikuliLibraryInterface {
 			new App(Integer.parseInt(appCommand)).focus();
 		} else {
 			App.focus(appCommand);
+		}
+	}
+	
+	public String getClipboardContent() {
+		try {
+			return Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString();
+		} catch (Exception e) {
+			throw new RuntimeException("Error in getting clipboard content.\n\n Error: "+e.getClass()+" with message "+e.getMessage()+".");
 		}
 	}
 	
