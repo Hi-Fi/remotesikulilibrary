@@ -1,4 +1,7 @@
 language: java
 
+##skip installation step
+install: true
+
 ## Run Integration tests
 script: "mvn test"
