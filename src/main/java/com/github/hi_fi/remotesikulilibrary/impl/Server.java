@@ -170,11 +170,17 @@ public class Server implements RemoteSikuliLibraryInterface {
 		}
 		String modifierText = "";
 		for (Object modifier : modifiers) {
-			modifierText = KeyMapper.getKey(modifier.toString());
+			modifierText = modifierText + KeyMapper.getKey(modifier.toString());
 			SikuliLogger.logDebug(modifier+" => "+modifierText);
 		}
 		keys = KeyMapper.getKey(keys);
-		Helper.getRegion().type(keys, modifierText);
+		
+		if (modifierText.length() > 0) {
+			Helper.getRegion().type(keys, modifierText);
+		} else {
+			Helper.getRegion().type(keys);
+		}
+		
 		if (numLockActive) {
 			Helper.getRegion().type(Key.NUM_LOCK);
 		}
