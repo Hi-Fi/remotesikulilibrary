@@ -21,17 +21,18 @@ public class Locator {
 	private int yOffset = 0;
 	private double similarity = 0.7;
 	
-	
 	public Locator(String[] args) {
 		SikuliLogger.logDebug(args);
 		if (args.length > 0 && NumberUtils.isNumber(args[0].toString())) {
 			this.setSimilarity(Double.parseDouble(args[0].toString()));
-			if (args.length == 3) {
+			if (args.length > 1) {
 				if (NumberUtils.isNumber(args[1].toString())) {
 					this.setxOffset(Integer.parseInt(args[1].toString()));
 				}
-				if (NumberUtils.isNumber(args[2].toString())) {
-					this.setyOffset(Integer.parseInt(args[2].toString()));
+				if (args.length > 2) {
+					if (NumberUtils.isNumber(args[2].toString())) {
+						this.setyOffset(Integer.parseInt(args[2].toString()));
+					}
 				}
 			}
 		}
@@ -47,56 +48,45 @@ public class Locator {
 		}
 	}
 
-
 	public String getImageData() {
 		return imageData;
 	}
-
 
 	public void setImageData(String imageData) {
 		this.imageData = imageData;
 	}
 
-
 	public boolean isImage() {
 		return image;
 	}
-
 
 	public void setImage(boolean image) {
 		this.image = image;
 	}
 
-
 	public boolean isText() {
 		return text;
 	}
-
 
 	public void setText(boolean text) {
 		this.text = text;
 	}
 
-
 	public boolean isRemote() {
 		return remote;
 	}
-
 
 	public void setRemote(boolean remote) {
 		this.remote = remote;
 	}
 
-
 	public int getxOffset() {
 		return xOffset;
 	}
 
-
 	public void setxOffset(int xOffset) {
 		this.xOffset = xOffset;
 	}
-
 
 	public int getyOffset() {
 		return yOffset;
@@ -115,7 +105,6 @@ public class Locator {
 	public float getSimilarityasFloat() {
 		return (float) similarity;
 	}
-
 
 	public void setSimilarity(double similarity) {
 		this.similarity = similarity;
