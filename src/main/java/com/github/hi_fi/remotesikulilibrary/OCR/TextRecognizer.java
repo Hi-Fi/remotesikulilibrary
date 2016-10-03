@@ -37,6 +37,20 @@ public class TextRecognizer {
 	// multiplier used to enlarge image and to calculate correct coordinates
 	int multiplier = 3;
 	
+	public static boolean isOCRAvailable() {
+		try {
+			TessAPI1.TessBaseAPICreate();
+			return true;
+		} catch (UnsatisfiedLinkError e) {
+			SikuliLogger.logError("Binary dependencies not available. Error: "+e.getMessage());
+			return false;
+		} catch (NoClassDefFoundError e) {
+			SikuliLogger.logError("Binary dependencies not available. Error: "+e.getMessage());
+			return false;
+		}
+		
+	}
+	
 	public void waitUntilTextIsVisible(String text) throws FindFailed {
 		List<Location> coordinates;
 		long startTime = System.currentTimeMillis();

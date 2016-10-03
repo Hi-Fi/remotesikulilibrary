@@ -7,6 +7,7 @@ import org.robotframework.remoteserver.RemoteServer;
 import org.sikuli.basics.Settings;
 
 import com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary;
+import com.github.hi_fi.remotesikulilibrary.OCR.TextRecognizer;
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
 import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
 
@@ -80,8 +81,10 @@ public class Configuration {
 	
 	@RobotKeyword("Enables OCR to allow text recognition usage when clicking.")
 	public void enableOCR() {
-		Settings.OcrTextSearch = true;
-		Settings.OcrTextRead = true;
+		if (TextRecognizer.isOCRAvailable()) {
+			Settings.OcrTextSearch = true;
+			Settings.OcrTextRead = true;
+		}
 	}
 	
 	@RobotKeyword("Disables OCR to allow text recognition usage when clicking.")

@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.DecodingException;
+import org.sikuli.basics.Settings;
 
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
 import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
@@ -41,9 +42,11 @@ public class Locator {
 			this.setImage(true);
 			this.setText(false);
 			this.setImageData(args[args.length-1].toString());
-		} else {
+		} else if (Settings.OcrTextSearch){
 			this.setText(true);
 			this.setImage(false);
+		} else {
+			throw new RuntimeException("No image given, but OCR disabled");
 		}
 	}
 
@@ -125,11 +128,10 @@ public class Locator {
 		try {
 			SikuliLogger.logDebug("Checking if " + Helper.getImageDirectory() + "/" + imageNameOrText + " is image");
 			File localImage = new File(Helper.getImageDirectory() + "/" + imageNameOrText);
-			if (localImage.exists()) {
-				this.imageData = Base64.encode(FileUtils.readFileToByteArray(localImage));
-			}
+			this.imageData = Base64.encode(FileUtils.readFileToByteArray(localImage));
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
