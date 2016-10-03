@@ -22,7 +22,7 @@ import com.github.hi_fi.remotesikulilibrary.utils.Helper;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest( TextRecognizer.class )
-public class TextRecognizerTest {
+public class TextRecognizerIT {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

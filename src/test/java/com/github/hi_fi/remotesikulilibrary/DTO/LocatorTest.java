@@ -1,6 +1,6 @@
 package com.github.hi_fi.remotesikulilibrary.DTO;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -8,15 +8,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest( Locator.class )
 public class LocatorTest {
 	
 	Locator locator;
-
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -26,19 +24,23 @@ public class LocatorTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
-		String[] arguments = {};
-		this.locator = new Locator(arguments);
+	public void setUp() {
+		this.locator = new Locator(new String[] {"TestingLikeEncodedImage"});
 	}
 
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@Test(expected = RuntimeException.class)
+	public void testExceptionThrownWhenLocatorCreatedWithEmptyArguments() {
+		String[] args = {};
+		new Locator(args);
+	}
 
-	@Test
-	public void noExceptionThrownWhenLocalTargetImageNotFound() {
+	@Test(expected = RuntimeException.class)
+	public void testExceptionThrownWhenLocalTargetImageNotFounddAndOCRIsOff() {
 		locator.updateLocatorTarget("Non-existing");
-		assertFalse(locator.isImage());
 	}
 	
 	@Test(expected = RuntimeException.class)
@@ -46,13 +48,11 @@ public class LocatorTest {
 		locator.setRemote(true);
 		locator.setImageData("Incorrect image data");
 		locator.updateLocatorTarget("Non-existing");
-		assertFalse(locator.isImage());
 	}
 	
-	@Test
-	public void noExceptionThrownIfImageNotFound() {
+	@Test(expected = RuntimeException.class)
+	public void exceptionThrownIfImageNotFoundAtEncoding() {
 		locator.encodeImageToBase64("Non-existing");
-		assertTrue(locator.getImageData().length() == 0);
 	}
 
 }
