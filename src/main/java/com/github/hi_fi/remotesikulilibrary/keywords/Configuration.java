@@ -91,6 +91,7 @@ public class Configuration {
 	}
 	
 	@RobotKeyword("Sets wait time to wait for images/texts.")
+	@ArgumentNames({"Timeout to wait in seconds"})
 	public void setWaitTime(double timeout) {
 		Helper.setWaitTimeout(timeout);
 	}

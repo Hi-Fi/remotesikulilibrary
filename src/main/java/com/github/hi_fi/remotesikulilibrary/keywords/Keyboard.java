@@ -41,5 +41,24 @@ public class Keyboard {
 		Helper.getLibrary().typeKeys("a", "CTRL");
 		Helper.getLibrary().inputText(text, null, locator);
 	}
+	
+	@RobotKeyword("Clicks at given location, tries to select all text and returns value that's captured to clipboard\n\n"
+			+ "Locator is same than in item click/wait, so same variables available")
+	@ArgumentNames({ "Image name or text to click", "Similarity of images=0.7",
+			"X offset from centre of image=0", "Y offset from centre of image=0", "*Technical arguments" })
+	public String selectAndGetText(String imageNameOrText, String[] arguments) {
+		Locator locator = new Locator(arguments);
+		Helper.getLibrary().clickItem(imageNameOrText, locator);
+		Helper.getLibrary().typeKeys("a", "CTRL");
+		Helper.getLibrary().typeKeys("c", "CTRL");
+		return Helper.getLibrary().getClipboardContent();
+	}
+	
+	
+	@RobotKeyword("Gets the content of the clipboard. \n\n"
+			+ "Please note that text input uses clipboard to paste text. Unless something is copied to clipboard that's returned.")
+	public String getClipboardContent() {
+		return Helper.getLibrary().getClipboardContent();
+	}
 
 }
