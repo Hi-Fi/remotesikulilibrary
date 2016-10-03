@@ -11,15 +11,13 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.sun.jna.Native;
-
 import net.sourceforge.tess4j.util.LoadLibs;
 
 import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest( LoadLibs.class )
-public class TextRecognizerTest {
+public class TextRecognizerOCRLoadingIT {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
