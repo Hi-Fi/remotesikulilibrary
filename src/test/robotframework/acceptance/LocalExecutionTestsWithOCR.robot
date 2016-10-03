@@ -1,6 +1,7 @@
 *** Settings ***
 Resource    common.robot
 Suite Setup    Setup OCR suite
+Suite Teardown    Disable OCR
 Test Setup    Start test application
 Test Teardown    Log results and kill process
 Force Tags    Local    OCR

@@ -249,7 +249,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 	
 	private void captureScreenshotInError(boolean remote) {
 		if (remote) {
-			SikuliLogger.logError("Image/text not found at remote computer. Screenshot below.");
+			SikuliLogger.logError("Error occurred at remote server. Screenshot below.");
 			boolean isDebug = Helper.isDebug();
 			if (!isDebug) {
 				Helper.enableDebug();
@@ -260,7 +260,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 				Helper.disableDebug();
 			}
 		} else {
-			SikuliLogger.logError("Image/text not found at local computer. Screenshot below.");
+			SikuliLogger.logError("Error occurred at local run. Screenshot below.");
 			SikuliLogger.logImage(Helper.writeImageByteArrayToDisk(this.captureScreenshot()));
 		}
 	}
