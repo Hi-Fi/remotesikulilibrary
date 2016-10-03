@@ -18,6 +18,12 @@ Test image clicks locally
     Double Click Item    cancel_button.png    cancel_double_clicked.png
     Right Click Item    submit_button.png    submit_right_clicked.png
 	
+Test image click offset
+    Double Click Item    ok_button.png    0.7    100
+    Wait Until Screen Contains    cancel_double_clicked.png    0.9
+    Double Click Item    submit_button.png    0.7    -100
+    Wait Until Screen Contains    cancel_double_clicked.png    0.9
+    
 Local input of text 
 	Wait Until Screen Contains    buttons.png
 	Input Text    Test text    empty_text_field.png
