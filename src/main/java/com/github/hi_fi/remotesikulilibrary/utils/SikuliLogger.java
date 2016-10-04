@@ -1,6 +1,12 @@
 package com.github.hi_fi.remotesikulilibrary.utils;
 
+import static org.apache.commons.lang.exception.ExceptionUtils.getStackTrace;
+
 public class SikuliLogger {
+	
+	public enum Level {
+		TRACE, DEBUG, INFO, HTML, WARN, ERROR
+	}
 	
 	public static void logImage(String imagePath) {
 		logHTML("<a href='"+imagePath+"' target='_blank'><img src='"+imagePath+"' style='width:80%; height: auto;'/></a>");
@@ -22,6 +28,14 @@ public class SikuliLogger {
 	
 	public static void logTrace(Object log) {
 		System.out.println("*TRACE* "+log);
+	}
+	
+	public static void logStackTrace(Throwable error) {
+		logStackTrace(error, Level.TRACE);
+	}
+			
+	public static void logStackTrace(Throwable error, Level logLevel) {
+		System.out.println("*"+logLevel.toString()+"* "+ getStackTrace(error));
 	}
 	
 	public static void log(Object log) {
