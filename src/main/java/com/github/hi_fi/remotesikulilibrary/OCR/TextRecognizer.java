@@ -42,13 +42,12 @@ public class TextRecognizer {
 			TessAPI1.TessBaseAPICreate();
 			return true;
 		} catch (UnsatisfiedLinkError e) {
-			SikuliLogger.logError("Binary dependencies not available. Error: "+e.getMessage());
-			return false;
+			SikuliLogger.logStackTrace(e);
+			throw new RuntimeException("Tried to enable OCR without binary dependencies. Error: "+e.getMessage());
 		} catch (NoClassDefFoundError e) {
-			SikuliLogger.logError("Binary dependencies not available. Error: "+e.getMessage());
-			return false;
+			SikuliLogger.logStackTrace(e);
+			throw new RuntimeException("Tried to enable OCR without binary dependencies. Error: "+e.getMessage());
 		}
-		
 	}
 	
 	public void waitUntilTextIsVisible(String text) throws FindFailed {
