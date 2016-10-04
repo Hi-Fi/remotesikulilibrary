@@ -241,9 +241,6 @@
 								<variable>maven.test.classpath:${maven.test.classpath}</variable>
 								<classpath />
 							</variables>
-							<includes>
-								<include>Remote</include>
-							</includes>
 						</configuration>
 					</execution>
 					<execution>
