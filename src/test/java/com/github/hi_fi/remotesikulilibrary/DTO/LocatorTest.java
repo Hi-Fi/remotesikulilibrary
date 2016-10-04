@@ -32,6 +32,12 @@ public class LocatorTest {
 	public void tearDown() throws Exception {
 	}
 
+	@Test
+	public void locatorCreatedWithEmptyArguments() {
+		String[] args = {};
+		new Locator(args);
+	}
+	
 	@Test(expected = RuntimeException.class)
 	public void testExceptionThrownWhenLocalTargetImageNotFounddAndOCRIsOff() {
 		locator.updateLocatorTarget("Non-existing");
