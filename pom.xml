@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.hi-fi</groupId>
 	<artifactId>remotesikulilibrary</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>robotframework-remotesikulilibrary</name>
@@ -45,7 +45,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<keywords.class>com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary</keywords.class>
+		<keywords.class>RemoteSikuliLibrary</keywords.class>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<powermock.version>1.6.5</powermock.version>
 	</properties>
@@ -241,6 +241,9 @@
 								<variable>maven.test.classpath:${maven.test.classpath}</variable>
 								<classpath />
 							</variables>
+							<includes>
+								<include>Remote</include>
+							</includes>
 						</configuration>
 					</execution>
 					<execution>
@@ -345,7 +348,7 @@
 						<classpath />
 						<argument>org.robotframework.remoteserver.RemoteServer</argument>
 						<argument>--library</argument>
-						<argument>com.github.hi_fi.remotesikulilibrary.RemoteSikuliLibrary:/</argument>
+						<argument>RemoteSikuliLibrary:/</argument>
 						<argument>--port</argument>
 						<argument>62022</argument>
 					</arguments>
