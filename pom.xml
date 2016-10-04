@@ -315,7 +315,7 @@
 						<configuration>
 							<target>
 								<copy todir="target/robotframework-reports/images" flatten="true"
-									overwrite="true">
+									overwrite="true" failonerror="false">
 									<fileset dir="images" includes="*.png" />
 								</copy>
 							</target>
