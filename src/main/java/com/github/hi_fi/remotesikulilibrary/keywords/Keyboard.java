@@ -14,9 +14,16 @@ public class Keyboard {
 			+ "Locator is same than in item click/wait, so same variables available")
 	@ArgumentNames({ "Text to type", "Image name or text to click", "Similarity of images=0.7",
 			"X offset from centre of image=0", "Y offset from centre of image=0", "*Technical arguments" })
-	public void inputText(String text, String imageNameOrText, String[] arguments) {
+	public void inputTextToField(String text, String imageNameOrText, String[] arguments) {
 		Locator locator = new Locator(arguments);
-		Helper.getLibrary().inputText(text, imageNameOrText, locator);
+		Helper.getLibrary().inputTextToField(text, imageNameOrText, locator);
+	}
+	
+	@RobotKeyword("Inputs given text to current (text) cursor location. Input is pasted, which allows support for international characters\n\n"
+			+ "This keyword doesn't click anywhere, so selection of text field needs to done with e.g. Click Item keyword.")
+	@ArgumentNames({ "Text to type", "*Technical arguments" })
+	public void pasteText(String text, String[] arguments) {
+		Helper.getLibrary().pasteText(text);
 	}
 
 	@RobotKeyword("Simulates keyboard typing one by one (or with modifiers)\n\n"

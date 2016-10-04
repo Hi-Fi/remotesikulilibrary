@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.ws.commons.util.Base64;
 import org.apache.ws.commons.util.Base64.DecodingException;
 import org.apache.xmlrpc.XmlRpcException;
-import org.sikuli.script.App;
 
 import com.github.hi_fi.remotesikulilibrary.DTO.Locator;
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
@@ -75,10 +74,14 @@ public class Client implements RemoteSikuliLibraryInterface {
 		this.executeRemoteCall("waitUntilScreenDoesNotContain", imageNameOrText, locator.getSimilarity(), locator.isRemote(), locator.getImageData());
 	}
 	
-	public void inputText(String text, String imageNameOrText, Locator locator) {
+	public void inputTextToField(String text, String imageNameOrText, Locator locator) {
 		locator.encodeImageToBase64(imageNameOrText);
 		locator.setRemote(true);
-		this.executeRemoteCall("inputText", text, imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
+		this.executeRemoteCall("inputTextToField", text, imageNameOrText, locator.getSimilarity(), locator.getxOffset(), locator.getyOffset(), locator.isRemote(), locator.getImageData());
+	}
+	
+	public void pasteText(String text) {
+		this.executeRemoteCall("pasteText", text);
 	}
 
 	public void typeKeys(String keys, Object...modifiers) {

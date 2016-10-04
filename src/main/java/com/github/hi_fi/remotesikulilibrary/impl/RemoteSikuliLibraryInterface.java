@@ -14,7 +14,9 @@ public interface RemoteSikuliLibraryInterface {
 	
 	public void waitUntilScreenDoesNotContain(String imageNameOrText, Locator locator);
 
-	public void inputText(String text, String imageNameOrText, Locator locator);
+	public void inputTextToField(String text, String imageNameOrText, Locator locator);
+	
+	public void pasteText(String text);
 
 	public void typeKeys(String text, Object...modifiers);
 	

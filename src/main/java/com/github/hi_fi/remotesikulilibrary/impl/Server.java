@@ -142,7 +142,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 		}
 	}
 
-	public void inputText(String text, String imageNameOrText, Locator locator) {
+	public void inputTextToField(String text, String imageNameOrText, Locator locator) {
 		imageNameOrText = locator.updateLocatorTarget(imageNameOrText);
 		if (imageNameOrText != null) {
 			try {
@@ -160,6 +160,10 @@ public class Server implements RemoteSikuliLibraryInterface {
 			}
 		}
 
+		this.pasteText(text);
+	}
+	
+	public void pasteText(String text) {
 		Helper.getRegion().paste(text);
 	}
 
