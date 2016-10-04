@@ -31,13 +31,13 @@ public class LocatorTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
-	@Test(expected = RuntimeException.class)
-	public void testExceptionThrownWhenLocatorCreatedWithEmptyArguments() {
+
+	@Test
+	public void locatorCreatedWithEmptyArguments() {
 		String[] args = {};
 		new Locator(args);
 	}
-
+	
 	@Test(expected = RuntimeException.class)
 	public void testExceptionThrownWhenLocalTargetImageNotFounddAndOCRIsOff() {
 		locator.updateLocatorTarget("Non-existing");

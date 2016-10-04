@@ -47,7 +47,8 @@ public class Locator {
 			this.setText(true);
 			this.setImage(false);
 		} else {
-			throw new RuntimeException("No image given, but OCR disabled");
+			this.setText(false);
+			this.setImage(true);
 		}
 	}
 
