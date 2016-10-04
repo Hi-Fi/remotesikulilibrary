@@ -196,7 +196,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 				new App(Integer.parseInt(appCommand)).close();
 			} catch (NullPointerException e) {
 				SikuliLogger.log("Application not found with given PID. Maybe it's closed earlier?");
-				SikuliLogger.logDebug(e.getStackTrace());
+				SikuliLogger.logStackTrace(e);
 			}
 		} else {
 			App.close(appCommand);
@@ -225,7 +225,7 @@ public class Server implements RemoteSikuliLibraryInterface {
 		try {
 			return FileUtils.readFileToByteArray(new File(temporaryScreenshotPath));
 		} catch (IOException e) {
-			SikuliLogger.logDebug(e.getStackTrace());
+			SikuliLogger.logStackTrace(e);
 			throw new RuntimeException(e.getMessage());
 		}
 	}
@@ -236,14 +236,14 @@ public class Server implements RemoteSikuliLibraryInterface {
 		try {
 			return FileUtils.readFileToByteArray(new File(temporaryScreenshotPath));
 		} catch (IOException e) {
-			SikuliLogger.logDebug(e.getStackTrace());
+			SikuliLogger.logStackTrace(e);
 			throw new RuntimeException(e.getMessage());
 		}
 	}
 
 	private void handleFindFailed(boolean remote, FindFailed e) {
 		this.captureScreenshotInError(remote);
-		SikuliLogger.logDebug(e.getStackTrace());
+		SikuliLogger.logStackTrace(e);
 		throw new RuntimeException(e.getMessage());
 	}
 	
