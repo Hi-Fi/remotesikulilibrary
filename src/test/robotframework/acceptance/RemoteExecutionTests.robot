@@ -16,12 +16,12 @@ Test image click at other remote server
 	
 Remote input of text 
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    empty_text_field.png
+	Input Text To Field    Test text    empty_text_field.png
     Wait Until Screen Contains    filled_text_field.png
 
 Local check that screen doesn't contain item
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    empty_text_field.png
+	Input Text To Field    Test text    empty_text_field.png
 	Wait Until Screen Does Not Contain    empty_text_field.png    0.8
 	
 Test remote screenshot capture to other remote server
@@ -42,9 +42,9 @@ Remote typing of special keys
 Remote input and copy text to clipboard
     ${fill text}    Set Variable    Test text
 	Wait Until Screen Contains    buttons.png
-	Input Text    ${fill text}    empty_text_field.png	
+	Input Text To Field    ${fill text}    empty_text_field.png	
 	Wait Until Screen Contains    filled_text_field.png
-	Input Text    ${fill text}    filled_text_field.png	
+	Input Text To Field    ${fill text}    filled_text_field.png	
 	Type Keys    a    CTRL
 	Type Keys    c    CTRL
 	${text}    Get Clipboard Content
@@ -76,7 +76,7 @@ Remote typing of special keys
     [Teardown]    Log results and kill process
     Prepare test environment for remote tests
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    empty_text_field.png
+	Input Text To Field    Test text    empty_text_field.png
 	Wait Until Screen Contains    filled_text_field.png
 	Type Keys    ${keys}    @{modifiers}
 	Wait Until Screen Contains    filled_and_selected_text_field.png    0.97

@@ -26,12 +26,12 @@ Test image click offset
     
 Local input of text 
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    empty_text_field.png
+	Input Text To Field    Test text    empty_text_field.png
 	Wait Until Screen Contains    filled_text_field.png
 	
 Local check that screen doesn't contain item
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    empty_text_field.png
+	Input Text To Field    Test text    empty_text_field.png
 	Wait Until Screen Does Not Contain    empty_text_field.png    0.8
 
 Local typing of special keys 
@@ -42,9 +42,9 @@ Local typing of special keys
 Local input and copy text to clipboard 
     ${fill text}    Set Variable    Test text
 	Wait Until Screen Contains    buttons.png
-	Input Text    ${fill text}    empty_text_field.png	
+	Input Text To Field    ${fill text}    empty_text_field.png	
 	Wait Until Screen Contains    filled_text_field.png
-	Input Text    ${fill text}    filled_text_field.png	
+	Input Text To Field    ${fill text}    filled_text_field.png	
 	Type Keys    a    CTRL
 	Type Keys    c    CTRL
 	${text}    Get Clipboard Content
@@ -52,7 +52,7 @@ Local input and copy text to clipboard
 
 Local input and replace of text 
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    empty_text_field.png
+	Input Text To Field    Test text    empty_text_field.png
 	Wait Until Screen Contains    filled_text_field.png	
 	Replace Text In Field    ${EMPTY}    filled_text_field.png
 	Wait Until Screen Contains    empty_text_field.png
@@ -86,7 +86,7 @@ Local typing of special keys
     [Teardown]    Log results and kill process
     Start test application
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    empty_text_field.png
+	Input Text To Field    Test text    empty_text_field.png
 	Wait Until Screen Contains    filled_text_field.png
 	Type Keys    ${keys}    @{modifiers}
 	Wait Until Screen Contains    filled_and_selected_text_field.png    0.9

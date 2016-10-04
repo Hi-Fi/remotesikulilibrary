@@ -46,7 +46,7 @@ public class Keyboard {
 		Locator locator = new Locator(arguments);
 		Helper.getLibrary().clickItem(imageNameOrText, locator);
 		Helper.getLibrary().typeKeys("a", "CTRL");
-		Helper.getLibrary().inputText(text, null, locator);
+		Helper.getLibrary().pasteText(text);
 	}
 	
 	@RobotKeyword("Clicks at given location, tries to select all text and returns value that's captured to clipboard\n\n"
