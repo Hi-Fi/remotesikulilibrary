@@ -15,7 +15,7 @@ Test image clicks locally
     
 Local input of text 
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    Test field    0.7    50    0
+	Input Text To Field    Test text    Test field    0.7    50    0
 	Wait Until Screen Contains    filled_text_field.png
 
 Wait for text to appear
@@ -40,7 +40,7 @@ Local typing of special keys
     [Teardown]    Log results and kill process
     Start test application
 	Wait Until Screen Contains    buttons.png
-	Input Text    Test text    empty_text_field.png
+	Input Text To Field    Test text    empty_text_field.png
 	Wait Until Screen Contains    filled_text_field.png
 	Type Keys    ${keys}    @{modifiers}
 	Wait Until Screen Contains    filled_and_selected_text_field.png    0.9

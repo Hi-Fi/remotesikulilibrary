@@ -135,7 +135,7 @@ public class Helper {
 	
 	private static void getRemoteKeywords() {
 		try {
-			Object response = remoteClient.execute("get_keyword_names", new Object[] {});
+			remoteClient.execute("get_keyword_names", new Object[] {});
 		} catch (XmlRpcException e) {
 			remoteClient = null;
 			throw new RuntimeException("Obtaining remote keywords failed");
