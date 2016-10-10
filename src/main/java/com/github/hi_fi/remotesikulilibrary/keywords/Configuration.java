@@ -31,7 +31,7 @@ public class Configuration {
 	
 	@RobotKeyword("Disables debug level logging")
 	public void disableDebugging() {
-		Helper.disableDebug();
+		Helper.getLibrary().disableDebugging();
 	}
 	
 	@RobotKeyword("Set directory containing Sikuli's test images.\n\n"
@@ -93,15 +93,15 @@ public class Configuration {
 		Settings.OcrTextRead = false;
 	}
 	
-	@RobotKeyword("Sets wait time to wait for images/texts.")
+	@RobotKeyword("Sets maximum wait time used in Wait-keywords are waiting for image/text.")
 	@ArgumentNames({"Timeout to wait in seconds"})
 	public void setWaitTime(double timeout) {
-		Helper.setWaitTimeout(timeout);
+		Helper.getLibrary().setWaitTime(timeout);
 	}
 	
-	@RobotKeyword("Disables OCR to allow text recognition usage when clicking.")
+	@RobotKeyword("Gets maximum wait used in time Wait-keywords are waiting for image/text.")
 	public double getWaitTime() {
-		return Helper.getWaitTimeout();
+		return Helper.getLibrary().getWaitTime();
 	}
 
 }

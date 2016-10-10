@@ -8,6 +8,8 @@ public interface RemoteSikuliLibraryInterface {
 	
 	public void enableDebugging();
 	
+	public void disableDebugging();
+	
 	public void clickItem(String imageNameOrText, Locator locator);
 	
 	public void waitUntilScreenContains(String imageNameOrText, Locator locator);
@@ -33,6 +35,10 @@ public interface RemoteSikuliLibraryInterface {
 	public void updateRegionToFocusedApp();
 	
 	public void resetRegionToFullScreen();
+	
+	public void setWaitTime(double waitTime);
+	
+	public double getWaitTime();
 	
 	public String getClipboardContent();
 }
