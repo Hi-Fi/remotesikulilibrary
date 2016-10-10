@@ -43,7 +43,7 @@ public class Locator {
 			this.setImage(true);
 			this.setText(false);
 			this.setImageData(args[args.length-1].toString());
-		} else if (Settings.OcrTextSearch){
+		} else if (Helper.ocrUsable){
 			this.setText(true);
 			this.setImage(false);
 		} else {

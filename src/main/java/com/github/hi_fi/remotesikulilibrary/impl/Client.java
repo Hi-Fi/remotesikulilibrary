@@ -119,6 +119,14 @@ public class Client implements RemoteSikuliLibraryInterface {
 		return Double.parseDouble(this.executeRemoteCall("getWaitTime"));
 	}
 	
+	public void setOCRStatus(boolean ocrAvailable) {
+		if (ocrAvailable) {
+			this.executeRemoteCall("enableOCR");
+		} else {
+			this.executeRemoteCall("disableOCR");
+		}
+	}
+	
 	@SuppressWarnings("rawtypes")
 	private String executeRemoteCall(String keyword, Object... params) {
 		Map response = new HashMap();

@@ -235,6 +235,18 @@ public class Server implements RemoteSikuliLibraryInterface {
 		return Helper.getWaitTimeout();
 	}
 	
+	public void setOCRStatus(boolean ocrAvailable) {
+		if (ocrAvailable) {
+			if (TextRecognizer.isOCRAvailable()) {
+				Helper.ocrUsable = true;
+			} else {
+				throw new RuntimeException("Tried to enable OCR while it was not possible");
+			}
+		} else {
+			Helper.ocrUsable = false;
+		}
+	}
+	
 	private byte[] captureRegion() {
 		String temporaryScreenshotPath = Helper.getRegion().saveScreenCapture();
 		SikuliLogger.logDebug("Temporary image stored to: " + temporaryScreenshotPath);

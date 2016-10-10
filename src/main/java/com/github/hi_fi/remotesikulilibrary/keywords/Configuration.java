@@ -81,16 +81,12 @@ public class Configuration {
 	
 	@RobotKeyword("Enables OCR to allow text recognition usage when clicking.")
 	public void enableOCR() {
-		if (TextRecognizer.isOCRAvailable()) {
-			Settings.OcrTextSearch = true;
-			Settings.OcrTextRead = true;
-		}
+		Helper.getLibrary().setOCRStatus(true);
 	}
 	
 	@RobotKeyword("Disables OCR to allow text recognition usage when clicking.")
 	public void disableOCR() {
-		Settings.OcrTextSearch = false;
-		Settings.OcrTextRead = false;
+		Helper.getLibrary().setOCRStatus(false);
 	}
 	
 	@RobotKeyword("Sets maximum wait time used in Wait-keywords are waiting for image/text.")
