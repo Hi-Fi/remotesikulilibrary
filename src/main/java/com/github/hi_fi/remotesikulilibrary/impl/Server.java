@@ -56,6 +56,10 @@ public class Server implements RemoteSikuliLibraryInterface {
 	public void enableDebugging() {
 		Helper.enableDebug();
 	}
+	
+	public void disableDebugging() {
+		Helper.disableDebug();
+	}
 
 	public void clickItem(String imageNameOrText, Locator locator) {
 		SikuliLogger.logDebug("Clicking item at Server class");
@@ -221,6 +225,14 @@ public class Server implements RemoteSikuliLibraryInterface {
 		} catch (Exception e) {
 			throw new RuntimeException("Error in getting clipboard content.\n\n Error: "+e.getClass()+" with message "+e.getMessage()+".");
 		}
+	}
+	
+	public void setWaitTime(double waitTime) {
+		Helper.setWaitTimeout(waitTime);
+	}
+	
+	public double getWaitTime() {
+		return Helper.getWaitTimeout();
 	}
 	
 	private byte[] captureRegion() {

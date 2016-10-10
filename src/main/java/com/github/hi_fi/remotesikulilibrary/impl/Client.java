@@ -40,6 +40,10 @@ public class Client implements RemoteSikuliLibraryInterface {
 	public void enableDebugging() {
 		this.executeRemoteCall("enableDebugging");
 	}
+	
+	public void disableDebugging() {
+		this.executeRemoteCall("disableDebugging");
+	}
 
 	public void clickItem(String imageNameOrText, Locator locator) {
 		locator.encodeImageToBase64(imageNameOrText);
@@ -105,6 +109,14 @@ public class Client implements RemoteSikuliLibraryInterface {
 	
 	public String getClipboardContent() {
 		return this.executeRemoteCall("getClipboardContent");
+	}
+	
+	public void setWaitTime(double waitTime) {
+		this.executeRemoteCall("setWaitTime", waitTime);
+	}
+	
+	public double getWaitTime() {
+		return Double.parseDouble(this.executeRemoteCall("getWaitTime"));
 	}
 	
 	@SuppressWarnings("rawtypes")
