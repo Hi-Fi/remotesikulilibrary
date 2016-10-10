@@ -41,4 +41,6 @@ public interface RemoteSikuliLibraryInterface {
 	public double getWaitTime();
 	
 	public String getClipboardContent();
+	
+	public void setOCRStatus(boolean ocrAvailable);
 }

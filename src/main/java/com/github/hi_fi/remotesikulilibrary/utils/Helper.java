@@ -19,6 +19,8 @@ import com.github.hi_fi.remotesikulilibrary.impl.Server;
 
 public class Helper {
 
+	public static boolean ocrUsable = false;
+	
 	private static RemoteSikuliLibraryInterface library = new Server();
 	private static XmlRpcClient remoteClient = null;
 	private static boolean remote = false;

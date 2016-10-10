@@ -119,6 +119,14 @@ public class Client implements RemoteSikuliLibraryInterface {
 		return Double.parseDouble(this.executeRemoteCall("getWaitTime"));
 	}
 	
+	public void setOCRStatus(boolean ocrAvailable) {
+		if (ocrAvailable) {
+			this.executeRemoteCall("enableOCR");
+		} else {
+			this.executeRemoteCall("disableOCR");
+		}
+	}
+	
 	@SuppressWarnings("rawtypes")
 	private String executeRemoteCall(String keyword, Object... params) {
 		Map response = new HashMap();
@@ -137,7 +145,7 @@ public class Client implements RemoteSikuliLibraryInterface {
 					SikuliLogger.logDebug("Output: " + response.get("output"));
 					if (response.get("output").toString().contains("-IMAGEDATA-")) {
 						String base64 = response.get("output").toString().split("-IMAGEDATA-")[1];
-						SikuliLogger.logDebug("Parser data from output: " + base64);
+						SikuliLogger.logTrace("Parser data from output: " + base64);
 						try {
 							Helper.writeImageByteArrayToDisk(Base64.decode(base64));
 						} catch (DecodingException e) {

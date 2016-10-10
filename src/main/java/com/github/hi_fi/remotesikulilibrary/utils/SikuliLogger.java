@@ -21,7 +21,9 @@ public class SikuliLogger {
 	}
 	
 	public static void logTrace(Object log) {
-		System.out.println("*TRACE* "+log);
+		if (Helper.isDebug()) {
+			System.out.println("*TRACE* "+log);
+		}
 	}
 	
 	public static void log(Object log) {
