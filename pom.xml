@@ -79,7 +79,12 @@
 		<dependency>
 			<groupId>net.sourceforge.tess4j</groupId>
 			<artifactId>tess4j</artifactId>
-			<version>3.2.1</version>
+			<version>3.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>tesseract-platform</artifactId>
+			<version>3.05.01-1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.imgscalr</groupId>
