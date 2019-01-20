@@ -1,7 +1,5 @@
 package com.github.hi_fi.remotesikulilibrary.OCR;
 
-import static net.sourceforge.tess4j.ITessAPI.TRUE;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +10,11 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.lept.PIX;
+import org.bytedeco.javacpp.tesseract.ResultIterator;
+import org.bytedeco.javacpp.tesseract.TessBaseAPI;
 import org.imgscalr.Scalr;
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Image;
@@ -20,12 +23,12 @@ import org.sikuli.script.Location;
 import com.github.hi_fi.remotesikulilibrary.impl.Server;
 import com.github.hi_fi.remotesikulilibrary.utils.Helper;
 import com.github.hi_fi.remotesikulilibrary.utils.SikuliLogger;
-import com.sun.jna.Pointer;
 
-import net.sourceforge.tess4j.TessAPI1;
-import net.sourceforge.tess4j.ITessAPI.TessBaseAPI;
-import net.sourceforge.tess4j.ITessAPI.TessPageIteratorLevel;
-import net.sourceforge.tess4j.util.LoadLibs;
+import static org.bytedeco.javacpp.lept.pixReadMem;
+import static org.bytedeco.javacpp.tesseract.PSM_SPARSE_TEXT;
+import static org.bytedeco.javacpp.tesseract.RIL_WORD;
+import static org.bytedeco.javacpp.tesseract.RIL_SYMBOL;
+import static org.bytedeco.javacpp.tesseract.RIL_TEXTLINE;
 
 public class TextRecognizer {
 
@@ -39,13 +42,17 @@ public class TextRecognizer {
 	
 	public static boolean isOCRAvailable() {
 		try {
-			TessAPI1.TessBaseAPICreate();
+			TessBaseAPI tba = new TessBaseAPI();
 			return true;
 		} catch (UnsatisfiedLinkError e) {
+		    SikuliLogger.logError(ExceptionUtils.getFullStackTrace(e));
 			SikuliLogger.logError("Binary dependencies not available. Error: "+e.getMessage());
+			SikuliLogger.logTrace(ExceptionUtils.getFullStackTrace(e));
 			return false;
 		} catch (NoClassDefFoundError e) {
+		    SikuliLogger.logError(ExceptionUtils.getFullStackTrace(e));
 			SikuliLogger.logError("Binary dependencies not available. Error: "+e.getMessage());
+			SikuliLogger.logTrace(ExceptionUtils.getFullStackTrace(e));
 			return false;
 		}
 		
@@ -89,9 +96,9 @@ public class TextRecognizer {
 	public List<Location> findTextFromImage(String text, String imageLocation) {
 		List<Location> coordinates = new ArrayList<Location>();
 		File imageFile = new File(imageLocation);
-		String datapath = LoadLibs.extractTessResources("tessdata").getAbsolutePath();
-		String language = "eng";
-		TessBaseAPI handle = TessAPI1.TessBaseAPICreate();
+//		String datapath = LoadLibs.extractTessResources("tessdata").getAbsolutePath();
+//		String language = "eng";
+		TessBaseAPI handle = new TessBaseAPI();
 		BufferedImage image;
 		try {
 			image = ImageIO.read(imageFile);
@@ -102,37 +109,62 @@ public class TextRecognizer {
 			int bpp = image.getColorModel().getPixelSize();
 			int bytespp = bpp / 8;
 			int bytespl = (int) Math.ceil(image.getWidth() * bpp / 8.0);
-			TessAPI1.TessBaseAPIInit3(handle, datapath, language);
-			TessAPI1.TessBaseAPISetPageSegMode(handle, TessAPI1.TessPageSegMode.PSM_SPARSE_TEXT);
-			TessAPI1.TessBaseAPISetImage(handle, buf, image.getWidth(), image.getHeight(), bytespp, bytespl);
-			TessAPI1.TessBaseAPIRecognize(handle, null);
-			TessAPI1.TessResultIterator ri = TessAPI1.TessBaseAPIGetIterator(handle);
-			TessAPI1.TessPageIterator pi = TessAPI1.TessResultIteratorGetPageIterator(ri);
-			TessAPI1.TessPageIteratorBegin(pi);
-			int level = TessPageIteratorLevel.RIL_WORD;
+//			TessAPI1.TessBaseAPIInit3(handle, datapath, language);
+			handle.SetPageSegMode(PSM_SPARSE_TEXT);
+			byte[] imageByteArray = new byte[buf.remaining()];
+			buf.get(imageByteArray, 0, imageByteArray.length);
+			PIX pixImage = pixReadMem(imageByteArray, imageByteArray.length);
+			handle.SetImage(pixImage);
+//			TessAPI1.TessBaseAPISetPageSegMode(handle, TessAPI1.TessPageSegMode.PSM_SPARSE_TEXT);
+//			TessAPI1.TessBaseAPISetImage(handle, buf, image.getWidth(), image.getHeight(), bytespp, bytespl);
+//			TessAPI1.TessBaseAPIRecognize(handle, null);
+//			TessAPI1.TessResultIterator ri = TessAPI1.TessBaseAPIGetIterator(handle);
+//			TessAPI1.TessPageIterator pi = TessAPI1.TessResultIteratorGetPageIterator(ri);
+//			TessAPI1.TessPageIteratorBegin(pi);
+			int level = RIL_WORD;
 			if (text.split(" ").length > 1) {
-				level = TessPageIteratorLevel.RIL_TEXTLINE;
+				level = RIL_TEXTLINE;
 			} else if (text.length() == 1) {
-				level = TessPageIteratorLevel.RIL_SYMBOL;
+				level = RIL_SYMBOL;
 			}
+			ResultIterator ri = handle.GetIterator();
+			boolean notFound = true;
 			do {
-				Pointer ptr = TessAPI1.TessResultIteratorGetUTF8Text(ri, level);
-				String foundText = ptr.getString(0);
-				TessAPI1.TessDeleteText(ptr);
-				if (foundText.contains(text)) {
-					IntBuffer leftB = IntBuffer.allocate(1);
-					IntBuffer topB = IntBuffer.allocate(1);
-					IntBuffer rightB = IntBuffer.allocate(1);
-					IntBuffer bottomB = IntBuffer.allocate(1);
-					TessAPI1.TessPageIteratorBoundingBox(pi, level, leftB, topB, rightB, bottomB);
-					int left = leftB.get()/multiplier;
-					int top = topB.get()/multiplier;
-					int right = rightB.get()/multiplier;
-					int bottom = bottomB.get()/multiplier;
-					SikuliLogger.logDebug(String.format("Location of %s is left: %d top:%d right:%d bottom:%d", foundText, left, top, right, bottom));
-					coordinates.add(new Location(left+(right-left)/2, top+(bottom-top)/2));
-				}
-			} while (TessAPI1.TessPageIteratorNext(pi, level) == TRUE);
+                BytePointer foundBP = ri.GetUTF8Text(level);
+                String foundString = foundBP.getString();
+                //foundBP.deallocate();
+                if (foundString.contains(text)) {
+                    IntBuffer leftB = IntBuffer.allocate(1);
+                    IntBuffer topB = IntBuffer.allocate(1);
+                    IntBuffer rightB = IntBuffer.allocate(1);
+                    IntBuffer bottomB = IntBuffer.allocate(1);
+                    ri.BoundingBox(level, leftB, topB, rightB, bottomB);
+                    int left = leftB.get()/multiplier;
+                    int top = topB.get()/multiplier;
+                    int right = rightB.get()/multiplier;
+                    int bottom = bottomB.get()/multiplier;
+                    SikuliLogger.logDebug(String.format("Location of %s is left: %d top:%d right:%d bottom:%d", foundString, left, top, right, bottom));
+                    coordinates.add(new Location(left+(right-left)/2, top+(bottom-top)/2));
+                }
+            } while (ri.Next(level));
+//			do {
+//				Pointer ptr = TessAPI1.TessResultIteratorGetUTF8Text(ri, level);
+//				String foundText = ptr.getString(0);
+//				TessAPI1.TessDeleteText(ptr);
+//				if (foundText.contains(text)) {
+//					IntBuffer leftB = IntBuffer.allocate(1);
+//					IntBuffer topB = IntBuffer.allocate(1);
+//					IntBuffer rightB = IntBuffer.allocate(1);
+//					IntBuffer bottomB = IntBuffer.allocate(1);
+//					TessAPI1.TessPageIteratorBoundingBox(pi, level, leftB, topB, rightB, bottomB);
+//					int left = leftB.get()/multiplier;
+//					int top = topB.get()/multiplier;
+//					int right = rightB.get()/multiplier;
+//					int bottom = bottomB.get()/multiplier;
+//					SikuliLogger.logDebug(String.format("Location of %s is left: %d top:%d right:%d bottom:%d", foundText, left, top, right, bottom));
+//					coordinates.add(new Location(left+(right-left)/2, top+(bottom-top)/2));
+//				}
+//			} while (TessAPI1.TessPageIteratorNext(pi, level) == TRUE);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

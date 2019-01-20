@@ -76,16 +76,16 @@
 			<artifactId>javalib-core</artifactId>
 			<version>1.2.1</version>
 		</dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>leptonica-platform</artifactId>
+            <version>1.77.0-1.4.4</version>
+        </dependency>
 		<dependency>
-			<groupId>net.sourceforge.tess4j</groupId>
-			<artifactId>tess4j</artifactId>
-			<version>3.4.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bytedeco.javacpp-presets</groupId>
-			<artifactId>tesseract-platform</artifactId>
-			<version>3.05.01-1.4</version>
-		</dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>tesseract-platform</artifactId>
+            <version>4.0.0-1.4.4</version>
+        </dependency>
 		<dependency>
 			<groupId>org.imgscalr</groupId>
 			<artifactId>imgscalr-lib</artifactId>
@@ -171,7 +171,7 @@
 					<plugin>
 						<groupId>org.robotframework</groupId>
 						<artifactId>robotframework-maven-plugin</artifactId>
-						<version>1.4.6</version>
+						<version>1.5.1</version>
 						<executions>
 							<execution>
 								<id>html</id>
@@ -231,7 +231,7 @@
 			<plugin>
 				<groupId>org.robotframework</groupId>
 				<artifactId>robotframework-maven-plugin</artifactId>
-				<version>1.4.6</version>
+				<version>1.5.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -246,6 +246,7 @@
 								<variable>maven.test.classpath:${maven.test.classpath}</variable>
 								<classpath />
 							</variables>
+							<logLevel>TRACE:INFO</logLevel>
 						</configuration>
 					</execution>
 					<execution>
